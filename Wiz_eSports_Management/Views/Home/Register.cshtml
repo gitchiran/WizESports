@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $('#user-registration-form').submit(function (e) {
+
+                e.preventDefault();
+                let formData = new FormData(this);
+
+                let files = $('#teamLogo')[0].files;
+
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("teamLogoFile", files[i]);
+                }
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Home/UserRegistration',
+                    data: formData,
+                    dataType: "html",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+
+                        if (typeof result == 'string') {
+                            result = JSON.parse(result);
+                        }
+
+                        if (result.status == 200) {
+                            //Success
+                        }
+                        else {
+                            //Failed
+                        }
+                
+                    },
+                    error: function () {
+                        //Failed
+                    }
+                });
+            });
+
+        });
+    </script>
+}
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area breadcrumb-bg s-breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-content text-center">
+                    <h2>Register Your <span>Clan</span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb-area-end -->
+
+<section class="contact-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 pl-45">
+                <div class="contact-form registration-from">
+                    <form id="user-registration-form">
+                        <h4>User <span> Information</span></h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Username" id="Username" name="Username">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" placeholder="Email" id="Email" name="Email">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="password" placeholder="Password" id="Password" name="Password">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="password" placeholder="Password Confirmation" id="Confirm" name="Confirm">
+                            </div>
+                        </div>
+                        <h4>Clan <span> Information</span></h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Team Name" id="teamName" name="teamName">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" placeholder="Team Logo" id="teamLogo" name="teamLogo">
+                            </div>
+                            <div class="col-md-12">
+                                <textarea name="teamDescription" id="teamDescription" placeholder="Team Description..."></textarea>
+                            </div>
+                        </div>
+                        <h4>Contact <span> Information</span></h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Contact Person Name" name="contactName" id="contactName">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Contact Person NIC" name="contactNic" id="contactNic">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" placeholder="Contact Person Email (Leave empty if same as the above)" name="contactEmail" id="contactEmail">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Contact Person Phone Number" name="contactPhone" id="contactPhone">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn" type="reset">Clear</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn" type="submit">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

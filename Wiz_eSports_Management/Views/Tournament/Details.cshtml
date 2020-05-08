@@ -1,0 +1,165 @@
+﻿@model DataAccessLayer.Entities.Tournament
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* Tournament Details Binindg, Update and Delete *@
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area breadcrumb-bg third-breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-content text-center">
+                    <h2>Blog <span>Details</span></h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index","Tournament")">Tournaments</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tournament Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb-area-end -->
+<!-- blog-area -->
+<section class="blog-area primary-bg pt-120 pb-175">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog-list-post blog-details-wrap">
+                    <div class="blog-list-post-content">
+                        <div class="blog-list-post-tag mb-25">
+                            @{
+                                var dateString = string.Empty;
+                                if (Model.SceduledDate.HasValue)
+                                {
+                                    dateString = Model.SceduledDate.Value.ToString("MMMM dd, yyyy");
+                                }
+                            }
+                            <a href="#">@dateString</a>
+                        </div>
+                        <h2>@Model.TournamentName</h2>
+                        <div class="blog-meta">
+                            @{
+                                dateString = string.Empty;
+                                if (Model.CreatedDate.HasValue)
+                                {
+                                    dateString = Model.CreatedDate.Value.ToString("MMMM dd, yyyy");
+                                }
+                            }
+                            <ul>
+                                <li>Created On @dateString</li>
+                            </ul>
+                        </div>
+                        <p>
+                            @Model.TournamentDescription
+                        </p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="blog-details-img">
+                                    <img src="img/blog/blog_details_img01.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="blog-details-img">
+                                    <img src="img/blog/blog_details_img02.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <aside class="blog-sidebar">
+
+                    <div class="widget mb-45">
+                        <div class="sidebar-about">
+                            <div class="sidebar-widget-title mb-25">
+                                <h4>Actions <span></span></h4>
+                            </div>
+                            <div class="sidebar-about-content">
+                                @if (ViewBag.UserRole == 1)
+                                {
+                                    <p><a class="btn">Edit</a></p>
+                                    <p><a class="btn">Delete</a></p>
+                                }
+                                else
+                                {
+                                    <a class="btn">Enroll</a>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget mb-45">
+                        <div class="sidebar-widget-title mb-25">
+                            <h4>Tournament <span>groups</span></h4>
+                        </div>
+                        <div class="rc-post-list">
+                            <a id="add-new-group" class="add-new-button"><i class="fas fa-plus"></i> Add New Group</a>
+                            <ul>
+                                <li>
+                                    <div class="rc-post-thumb">
+                                        <a href="#"><img src="~/theme/img/blog/rc_post_thumb01.jpg" alt=""></a>
+                                    </div>
+                                    <div class="rc-post-content">
+                                        <h5><a href="#">EVERYONE zombie</a></h5>
+                                        <span>OCTOBER 19, 2020</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="sidebar-widget-title mb-25">
+                            <h4>Teams <span>Joined</span></h4>
+                        </div>
+                        <div class="sidebar-tag-list">
+                            <ul>
+                                <li><a href="#">pubg</a></li>
+                                <li><a href="#">dota 2</a></li>
+                                <li><a href="#">zombie</a></li>
+                                <li><a href="#">call of duty</a></li>
+                                <li><a href="#">development</a></li>
+                                <li><a href="#">zombieland 2</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget mb-45">
+                        <div class="sidebar-widget-title mb-25">
+                            <h4>More <span>Tournaments</span></h4>
+                        </div>
+                        <div class="sidebar-cat">
+                            <ul>
+                                <li><a href="#">ESPORTS ( 12 )</a></li>
+                                <li><a href="#">play store ( 03 )</a></li>
+                                <li><a href="#">pubg ( 09 )</a></li>
+                                <li><a href="#">zombieland ( 07 )</a></li>
+                                <li><a href="#">shooting ( 02 )</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- blog-area-end -->
+
+<div class="modal fade theme-modal" id="tournamnt-details-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>

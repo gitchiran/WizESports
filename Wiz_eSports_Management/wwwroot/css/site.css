@@ -1,0 +1,198 @@
+﻿
+a {
+    cursor: pointer;
+}
+
+.login-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    margin: 0 auto;
+}
+
+    .login-form input {
+        background: transparent;
+        color: #fff;
+    }
+
+    .login-form button, .login-form a {
+        display: block;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 800;
+        color: #ffffff;
+        text-transform: uppercase;
+        background: none;
+        cursor: pointer;
+        line-height: 1;
+        padding: 20px;
+        border: 2px solid #e9a301;
+        margin: 20px 0;
+        transition: .3s linear;
+        text-align: center;
+    }
+
+        .login-form a:hover {
+            color: #e4a101;
+        }
+
+.lined-text {
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    position: absolute;
+    top: -14px;
+    letter-spacing: 5px;
+    font-size: 30px;
+    margin: 0;
+}
+
+.registration-from h4 {
+    color: #1c1121;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+    .registration-from h4 span {
+        color: #e4a101;
+    }
+
+.clan-item {
+    justify-content: center;
+}
+
+    .clan-item img {
+        width: 200px;
+        height: 200px;
+    }
+
+.clan-name {
+    padding: 20px;
+}
+
+    .clan-name h5 {
+        margin: 0;
+    }
+
+.flex-side-by-side-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dark-js-grid .jsgrid-header-row > .jsgrid-header-cell {
+    color: #1a0e22 !important;
+}
+
+.dark-js-grid .jsgrid-row > .jsgrid-cell, .dark-js-grid .jsgrid-alt-row > .jsgrid-cell {
+    background: transparent !important;
+    color: #fff !important;
+}
+
+.jsgrid-header-row > .jsgrid-header-cell {
+    color: #000;
+}
+
+.jsgrid-row > .jsgrid-cell, .jsgrid-alt-row > .jsgrid-cell {
+    color: #c6c6c6;
+}
+
+.table-outside-container {
+    margin: auto !important;
+}
+
+.footer-bg {
+    padding: 65px 0 !important;
+}
+
+.theme-modal .modal-dialog {
+    top: 30%;
+    left: 0;
+    right: 0;
+    margin: auto !important;
+    max-width: 80%;
+}
+
+    .theme-modal .modal-dialog .modal-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .theme-modal .modal-dialog .modal-content form textarea {
+            width: 100%;
+            font-size: 36px;
+            border: none;
+            border-bottom: 3px solid rgba(255,255,255,.1);
+            background: 0 0;
+            color: #fff;
+            padding-bottom: 12px;
+            padding-right: 40px;
+        }
+
+            .theme-modal .modal-dialog .modal-content form textarea::-moz-placeholder {
+                font-size: 35px;
+            }
+
+            .theme-modal .modal-dialog .modal-content form textarea::placeholder {
+                font-size: 35px;
+            }
+
+        .theme-modal .modal-dialog .modal-content form button {
+            position: relative;
+        }
+
+.modal-form-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.datepicker table tr td.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active:hover {
+    background-image: linear-gradient(to bottom,#e4a101,#e4a101);
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.tournament-fee {
+    bottom: 5px;
+    right: 10px;
+}
+
+.latest-match-box .tournament-schedule-content {
+    width: 100%;
+}
+
+.tournament-schedule-content h4 {
+    font-size: 14px;
+    line-height: 1;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+    .tournament-schedule-content h4 span {
+        color: #e4a101;
+    }
+
+.add-new-button {
+    transition: .2s all;
+    margin-bottom: 15px;
+    display: block;
+    position: relative;
+}
+    .add-new-button:hover {
+        color: #e4a101 !important;
+    }
+
+.sidebar-about-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.sidebar-about-content .btn {
+    color: #fff !important;
+}

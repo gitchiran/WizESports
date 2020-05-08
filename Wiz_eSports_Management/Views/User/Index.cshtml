@@ -1,0 +1,135 @@
+﻿@model IEnumerable<DataAccessLayer.Entities.User>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(function () {
+            const userRoles = [
+                { Name: "Admin", Id: 1 },
+                { Name: "Team", Id: 2 }
+            ];
+ 
+            $("#usersTable").jsGrid({
+                height: "auto",
+                width: "75%",
+ 
+                filtering: false,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+ 
+                pageSize: 15,
+                pageButtonCount: 5,
+ 
+                deleteConfirm: "Do you really want to delete the client?",
+ 
+                controller: {
+                    loadData: function(filter) {
+                        return $.ajax({
+                            url: "/User/GetUser",
+                            dataType: "json"
+                        });
+                    }
+                },
+ 
+                fields: [
+                    { name: "username", type: "text", width: 150, title: "Username" },
+                    { name: "email", type: "text", width: 300, title: "Email" },
+                    { name: "registeredDate", type: "text", width: 200, title: "Register Date", editing: false },
+                    { name: "lastLoginDate", type: "text", width: 200, title: "Last Login", editing: false },
+                    {
+                        name: "roleId",
+                        type: "select",
+                        items: userRoles, valueField: "Id", textField: "Name",
+                        title: "Role"
+                    },
+                    { name: "isActive", type: "checkbox", title: "Active", sorting: false },
+                    { name: "isLocked", type: "checkbox", title: "Locked", sorting: false },
+                    { name: "isVerified", type: "checkbox", title: "Verified", sorting: false },
+                    { type: "control" }
+                ],
+
+                onItemInserted: function(args) {
+                    // cancel insertion of the item with empty 'name' field
+                    let valid = true;
+                    if(args.item.username === "") {
+                        args.cancel = true;
+                        alert("Specify the name of the item!");
+                        valid = false;
+                    }
+
+                    if (valid) {
+                        $.ajax({
+                            url: "/User/SaveUser",
+                            dataType: "json",
+                            data: args.item,
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                },
+
+                onItemUpdated: function(args) {
+                    // cancel editing of the row of item with field 'ID' = 0
+                    if (args.item.ID === 0) {
+                        args.cancel = true;
+                    } else {
+                        $.ajax({
+                            url: "/User/UpdateUser",
+                            dataType: "json",
+                            data: args.item,
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                },
+
+                onItemDeleted: function(args) {
+                    // cancel deletion of the item with 'protected' field
+                    if(args.item.protected) {
+                        args.cancel = true;
+                    }
+                    else {
+                        $.ajax({
+                            url: "/User/DeleteUser",
+                            dataType: "json",
+                            data: { "userId": args.item.id },
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                }
+            });
+ 
+        });
+    </script>
+}
+
+@* JS GRID WITH CRUD AND LOCK *@
+
+
+<!-- latest-match-area -->
+<section class="latest-match-area latest-match-bg pt-115 pb-90">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-8">
+                <div class="section-title title-style-three white-title text-center mb-70">
+                    <h2>gaming Latest <span>matches</span></h2>
+                    <p>
+                        Compete with 100 players on a remote island for winner takes showdown
+                        known issue where certain skin strategic
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table id="usersTable" class="table-outside-container dark-js-grid"></table>
+</section>
+<!-- latest-match-area-end -->

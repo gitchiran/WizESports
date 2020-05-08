@@ -1,0 +1,188 @@
+﻿@model DataAccessLayer.Entities.Team
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(function () {
+            const teamId = $('#teamInfo').data('id');
+
+            $("#teamPlayerTable").jsGrid({
+                height: "auto",
+                width: "100%",
+
+                filtering: false,
+                editing: true,
+                sorting: true,
+                paging: true,
+                inserting: true,
+                autoload: true,
+
+                pageSize: 15,
+                pageButtonCount: 5,
+
+                deleteConfirm: "Do you really want to delete the client?",
+
+                controller: {
+                    loadData: function (filter) {
+                        return $.ajax({
+                            url: "/Team/GetPlayers",
+                            dataType: "json",
+                            data: { "teamId": teamId }
+                        });
+                    }
+                },
+
+                fields: [
+                    { name: "playerName", type: "text", width: 350, title: "Username" },
+                    { name: "nic", type: "text", width: 100, title: "NIC Number" },
+                    { type: "control" }
+                ],
+
+                onItemInserted: function (args) {
+                    // cancel insertion of the item with empty 'name' field
+                    let valid = true;
+                    if (args.item.username === "") {
+                        args.cancel = true;
+                        alert("Specify the name of the item!");
+                        valid = false;
+                    }
+
+                    args.item.teamId = teamId;
+
+                    if (valid) {
+                        $.ajax({
+                            url: "/Team/SavePlayer",
+                            dataType: "json",
+                            data: args.item,
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                },
+
+                onItemUpdated: function (args) {
+                    // cancel editing of the row of item with field 'ID' = 0
+                    if (args.item.ID === 0) {
+                        args.cancel = true;
+                    } else {
+                        $.ajax({
+                            url: "/Team/UpdatePlayer",
+                            dataType: "json",
+                            data: args.item,
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                },
+
+                onItemDeleted: function (args) {
+                    // cancel deletion of the item with 'protected' field
+                    if (args.item.protected) {
+                        args.cancel = true;
+                    }
+                    else {
+                        $.ajax({
+                            url: "/Team/DeletePlayer",
+                            dataType: "json",
+                            data: { "playerId": args.item.id },
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                }
+            });
+
+        });
+    </script>
+}
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area breadcrumb-bg s-breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-content text-center">
+                    <h2 data-id="@Model.Id" id="teamInfo">@Model.TeamName</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            @if (ViewBag.UserRole == 1)
+                            {
+                                <li class="breadcrumb-item"><a href="@Url.Action("Index","Admin")">Home</a></li>
+                                <li class="breadcrumb-item"><a href="@Url.Action("Index","Team")">Teams</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@Model.TeamName</li>
+                            }
+                            @if (ViewBag.UserRole == 2)
+                            {
+                                <li class="breadcrumb-item"><a href="@Url.Action("Home","Team")">Home</a></li>
+                            }
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb-area-end -->
+<!-- game-single-area -->
+<section class="game-single-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="game-single-content">
+                    <div class="upcoming-game-head">
+                        <div class="uc-game-head-title">
+                            @{
+                                var dateString = string.Empty;
+                                if(Model.RegistrationDate.HasValue)
+                                {
+                                    dateString = Model.RegistrationDate.Value.ToString("MMMM dd, yyyy");
+                                }
+                             }
+                            <span>@dateString</span>
+                            <h4>@Model.TeamDescription</h4>
+                        </div>
+                    </div>
+                    <div class="game-single-title mt-60 mb-30 flex-side-by-side-header">
+                        <h4>Team <span>Players</span></h4>
+                    </div>
+                    <div class="game-single-info mb-65">
+                        <table id="teamPlayerTable"></table>
+                    </div>
+                    <div class="game-single-title mb-30">
+                        <h4>Team <span>Memories</span></h4>
+                    </div>
+                    <div class="game-single-gallery">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery01.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery02.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery03.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery04.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery05.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery06.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-single-shape"><img src="~/theme/img/images/game_section_shape.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- game-single-area-end -->

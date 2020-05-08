@@ -1,0 +1,54 @@
+﻿@model IEnumerable<DataAccessLayer.Entities.Tournament>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $('.tournament-container').click(function () {
+                let tournamentId = $(this).data('tournamentid');
+                window.location.href = "/Tournament/Details?tournamentId=" + tournamentId;
+            });
+
+            $('.add-new-button').click(function () {
+                $.get('/Tournament/AddTournamentPopup', function (response) {
+
+                    $('#tournamnt-add-modal').html(response);
+                    $('#tournamnt-add-modal').modal('show');
+
+                });
+            });
+        });
+    </script>
+}
+
+<!-- latest-match-area -->
+<section class="latest-match-area latest-match-bg pt-115 pb-90">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-8">
+                <div class="section-title title-style-three white-title text-center mb-70">
+                    <h2>gaming Latest <span>matches</span></h2>
+                    <p>
+                        Compete with 100 players on a remote island for winner takes showdown
+                        known issue where certain skin strategic
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="float-right"><a class="add-new-button"><i class="fas fa-plus"></i> Add New Tournament</a></div>
+            </div>
+        </div>
+        <div id="tournament-section">
+            <partial name="_TournamentList" model="Model">
+        </div>
+    </div>
+</section>
+<!-- latest-match-area-end -->
+
+<div class="modal fade theme-modal" id="tournamnt-add-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>

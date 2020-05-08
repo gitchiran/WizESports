@@ -1,0 +1,81 @@
+﻿@model IEnumerable<DataAccessLayer.Entities.Clan>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.clan-container').click(function () {
+                let clanId = $(this).data('clanid');
+                window.location.href = "/Clan/Details?clanId=" + clanId;
+            });
+        });
+    </script>
+}
+
+<section class="game-manage-area game-mange-bg pt-120 pb-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-7 col-lg-8">
+                <div class="section-title title-style-two text-center mb-60">
+                    <span>COME THE END OF THE WORLD</span>
+                    <h2>Last Match <span>Scores</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <a class="clan-container" data-clanid="1">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team clan-item">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <img src="~/theme/img/team/team_logo02.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coming-match-info clan-name">
+                            <h5><span>Clan Name</span></h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <a class="clan-container" data-clanid="2">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team clan-item">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <img src="~/theme/img/team/team_logo02.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coming-match-info clan-name">
+                            <h5><span>Clan Name</span></h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <a class="clan-container" data-clanid="3">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team clan-item">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <img src="~/theme/img/team/team_logo02.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coming-match-info clan-name">
+                            <h5><span>Clan Name</span></h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+

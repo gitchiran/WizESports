@@ -1,0 +1,88 @@
+﻿@model DataAccessLayer.Entities.Clan
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let clanId = 1;
+            $.get('/Clan/GetTeams?clanId=' + clanId, function (resposne) {
+                $('#teamList').html(resposne);
+            });
+        });
+    </script>
+}
+
+<!-- breadcrumb-area -->
+<section class="breadcrumb-area breadcrumb-bg s-breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-content text-center">
+                    <h2>Clan Name</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">pages</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">game single</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb-area-end -->
+<!-- game-single-area -->
+<section class="game-single-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="game-single-content">
+                    <div class="upcoming-game-head">
+                        <div class="uc-game-head-title">
+                            <span>SEPTEMBER 22, 2020</span>
+                            <h4>clan description</h4>
+                        </div>
+                    </div>
+                    <div class="game-single-title mt-60 mb-30 flex-side-by-side-header">
+                        <h4>Clan <span>Teams</span></h4>
+                        <a>Add Teams</a>
+                    </div>
+                    <div class="game-single-info mb-65" id="teamList">
+                        
+                    </div>
+                    <div class="game-single-title mb-30">
+                        <h4>Clan <span>Memories</span></h4>
+                    </div>
+                    <div class="game-single-gallery">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery01.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery02.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery03.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery04.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery05.jpg" alt="">
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <img src="~/theme/img/images/game_single_gallery06.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-single-shape"><img src="~/theme/img/images/game_section_shape.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- game-single-area-end -->

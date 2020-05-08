@@ -1,0 +1,57 @@
+﻿@model IEnumerable<DataAccessLayer.Entities.Team>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.team-container').click(function () {
+                let teamId = $(this).data('teamid');
+                window.location.href = "/Team/Details?teamId=" + teamId;
+            });
+        });
+    </script>
+}
+
+<section class="game-manage-area game-mange-bg pt-120 pb-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-7 col-lg-8">
+                <div class="section-title title-style-two text-center mb-60">
+                    <span>COME THE END OF THE WORLD</span>
+                    <h2>Last Match <span>Scores</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+
+            @foreach(var team in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <a class="team-container" data-teamid="@team.Id">
+                        <div class="coming-match-item mb-30">
+                            <div class="coming-match-team clan-item">
+                                <div class="match-team-info">
+                                    <div class="match-team-logo">
+                                        <img src="~/UserContent/Teams/@team.UserId/@team.LogoPath" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coming-match-info clan-name">
+                                <h5><span>@team.TeamName</span></h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+            @if(Model.Count() == 0)
+            {
+                <p>No teams are registerd in the system</p>
+            }
+
+        </div>
+    </div>
+</section>

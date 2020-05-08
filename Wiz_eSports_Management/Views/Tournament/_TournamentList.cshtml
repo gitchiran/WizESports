@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DataAccessLayer.Entities.Tournament>
+
+<div class="row">
+
+    @foreach (var tournament in Model)
+    {
+        <div class="col-lg-6">
+            <a class="tournament-container cursor-pointer" data-tournamentid="@tournament.Id">
+                <div class="latest-match-box mb-30">
+                    <div class="latest-match-thumb">
+                        <img src="~/theme/img/images/latest_match_thumb01.jpg" alt="">
+                    </div>
+                    <div class="tournament-schedule-content">
+                        @{
+                            var dateString = string.Empty;
+                            if (tournament.SceduledDate.HasValue)
+                            {
+                                dateString = tournament.SceduledDate.Value.ToString("MMMM dd, yyyy");
+                            }
+                        }
+                        <h3>@tournament.TournamentName</h3>
+                        <h4><span> @dateString</span></h4>
+                        <p>@tournament.TournamentDescription</p>
+                        <div class="tournament-schedule-meta tournament-fee">
+                            <h5>Entry Fee: <span>$@tournament.EntryFee</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+
+    @if (Model.Count() == 0)
+    {
+        <p>No Tournaments Registered</p>
+    }
+
+</div>

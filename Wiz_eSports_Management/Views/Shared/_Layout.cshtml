@@ -1,0 +1,345 @@
+﻿
+@{
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+    @using Microsoft.Extensions.Configuration
+    @inject IConfiguration configuration
+    @using Microsoft.AspNetCore.Http;
+    @using Wiz_eSports_Management.Common;
+    @using DataAccessLayer.Model;
+
+    ISession _session = httpContextAccessor.HttpContext.Session;
+    LoggedUser user = null;
+    if (_session != null && _session.Keys.Contains("LoggedUser"))
+    {
+        user = _session.GetSession<LoggedUser>("LoggedUser");
+    }
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Geco - eSports Gaming HTML5 Template</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/theme/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+    <!-- CSS here -->
+    <link rel="stylesheet" href="~/theme/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/theme/css/animate.min.css">
+    <link rel="stylesheet" href="~/theme/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/theme/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="~/theme/css/odometer.css">
+    <link rel="stylesheet" href="~/theme/css/aos.css">
+    <link rel="stylesheet" href="~/theme/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/theme/css/meanmenu.css">
+    <link rel="stylesheet" href="~/theme/css/slick.css">
+    <link rel="stylesheet" href="~/theme/css/default.css">
+    <link rel="stylesheet" href="~/theme/css/style.css">
+    <link rel="stylesheet" href="~/theme/css/responsive.css">
+
+    <link rel="stylesheet" href="~/lib/jsgrid-1.5.3/jsgrid.min.css">
+    <link rel="stylesheet" href="~/lib/jsgrid-1.5.3/jsgrid-theme.min.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker-master/dist/css/bootstrap-datepicker.min.css">
+
+    <link rel="stylesheet" href="~/css/site.css">
+
+    
+
+</head>
+<body>
+
+    <!-- preloader -->
+    <div id="preloader">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <img src="~/theme/img/icon/preloader.svg" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- preloader-end -->
+    <!-- header-area -->
+    <header>
+        <div class="header-top-area d-none d-lg-block">
+            <div class="container-fluid container-full-padding">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 d-none d-lg-block">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="header-top-right">
+                            <div class="header-social">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="header-top-action">
+                                <ul>
+                                    <li>
+                                        <div class="header-top-mail">
+                                            <p><span>|</span><i class="far fa-envelope"></i><a href="mailto:wiz@gmail.com">wiz@gmail.com</a></p>
+                                        </div>
+                                    </li>
+
+                                    @if (user == null)
+                                    {
+                                        <li>
+                                            <div class="header-user-login">
+                                                <a href="@Url.Action("Login","Home")"><i class="fas fa-user"></i>Login / Signup</a>
+                                            </div>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <div class="header-user-login">
+                                                <a href="@Url.Action("Logout","Home")"><i class="fas fa-power-off"></i>Logout</a>
+                                            </div>
+                                        </li>
+                                    }
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sticky-header" class="main-header">
+            <div class="container-fluid container-full-padding">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="main-menu">
+                            <nav>
+                                <div class="logo">
+                                    <a href="index-2.html"><img src="~/theme/img/logo/logo.png" alt="Logo"></a>
+                                </div>
+                                <div id="mobile-menu" class="navbar-wrap d-none d-lg-flex">
+                                    <ul>
+                                        @if (user != null && user.RoleId == 1)@* FOR ADMIN ONLY *@
+                                        {
+                                            <li class="show"><a href="@Url.Action("Index","Tournament")">tournaments</a></li>
+                                            <li><a href="@Url.Action("Index","Team")">teams</a></li>
+                                            <li><a href="@Url.Action("Index","User")">users</a></li>
+                                        }
+                                        else if (user != null && user.RoleId == 2) @* FOR CLAN ONLY *@
+                                        {
+                                            <li class="show"><a href="@Url.Action("Home","Team")">Home</a></li>
+                                            <li><a href="@Url.Action("Index","Tournament")">tournaments</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="show"><a href="@Url.Action("Index","Home")">Home</a></li>
+                                            <li><a href="@Url.Action("About","Home")">About</a></li>
+                                            <li><a href="@Url.Action("Contact","Home")">contact</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="mobile-menu"></div>
+                    </div>
+                    <!-- Modal Search -->
+                    <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form>
+                                    <input type="text" placeholder="Search here...">
+                                    <button><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-area-end -->
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- footer-area -->
+    <footer>
+        <div class="footer-top footer-bg">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="footer-widget mb-50">
+                            <div class="footer-logo mb-35">
+                                <a href="index.html"><img src="~/theme/img/logo/logo.png" alt=""></a>
+                            </div>
+                            <div class="footer-text">
+                                <p>Gemas marketplace the relase etras thats sheets continig passag.</p>
+                                <div class="footer-contact">
+                                    <ul>
+                                        <li>
+                                            <i class="fas fa-map-marker-alt"></i> <span>Address : </span>PO Box W75 Street
+                                            lan West new queens
+                                        </li>
+                                        <li><i class="fas fa-headphones"></i> <span>Phone : </span>+24 1245 654 235</li>
+                                        <li><i class="fas fa-envelope-open"></i><span>Email : </span>info@exemple.com</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-sm-6">
+                        <div class="footer-widget mb-50">
+                            <div class="fw-title mb-35">
+                                <h5>Products</h5>
+                            </div>
+                            <div class="fw-link">
+                                <ul>
+                                    <li><a href="#">Graphics (26)</a></li>
+                                    <li><a href="#">Backgrounds (11)</a></li>
+                                    <li><a href="#">Fonts (9)</a></li>
+                                    <li><a href="#">Music (3)</a></li>
+                                    <li><a href="#">Photography (3)</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-sm-6">
+                        <div class="footer-widget mb-50">
+                            <div class="fw-title mb-35">
+                                <h5>Need Help?</h5>
+                            </div>
+                            <div class="fw-link">
+                                <ul>
+                                    <li><a href="#">Terms & Conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Refund Policy</a></li>
+                                    <li><a href="#">Affiliate</a></li>
+                                    <li><a href="#">FAQUse Cases</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="footer-widget mb-50">
+                            <div class="fw-title mb-35">
+                                <h5>Follow us</h5>
+                            </div>
+                            <div class="footer-social">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer-widget mb-50">
+                            <div class="fw-title mb-35">
+                                <h5>Newsletter Sign Up</h5>
+                            </div>
+                            <div class="footer-newsletter">
+                                <form action="#">
+                                    <input type="text" placeholder="Enter your email">
+                                    <button><i class="fas fa-rocket"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-fire"><img src="~/theme/img/images/footer_fire.png" alt=""></div>
+            <div class="footer-fire footer-fire-right"><img src="~/theme/img/images/footer_fire.png" alt=""></div>
+        </div>
+        <div class="copyright-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="copyright-text">
+                            <p>Copyright © 2020 <a href="#">WIZ</a> All Rights Reserved.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 d-none d-md-block">
+                        <div class="payment-method-img text-right">
+                            <img src="~/theme/img/images/card_img.png" alt="img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer-area-end -->
+    <!--DataPopupTest-->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tournament Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form>
+                        <div class="form-group">
+                            <label for="category-name" class="col-form-label">Category:</label>
+                            <input type="text" class="form-control" id="category-name" value="PUBG" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="gametype-name" class="col-form-label">Game Type:</label>
+                            <input type="text" class="form-control" id="gametype-name" value="WAR" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="entry-fee" class="col-form-label">Entry Fee:</label>
+                            <input type="text" class="form-control" id="entry-fee" value="$10" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Rules & Regulations:</label>
+                            <textarea class="form-control" id="message-text" rows="5" disabled> Each clan should register 6 players including reserve 2 players.4 players are allowed to play.Futher more all players should agree to the rules and regulations. </textarea>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--DataPopupTest - End -->
+    <!-- JS here -->
+    <script src="~/theme/js/vendor/jquery-3.4.1.min.js"></script>
+    <script src="~/theme/js/popper.min.js"></script>
+    <script src="~/theme/js/bootstrap.min.js"></script>
+    <script src="~/theme/js/isotope.pkgd.min.js"></script>
+    <script src="~/theme/js/slick.min.js"></script>
+    <script src="~/theme/js/jquery.meanmenu.min.js"></script>
+    <script src="~/theme/js/wow.min.js"></script>
+    <script src="~/theme/js/aos.js"></script>
+    <script src="~/theme/js/jquery.lettering.js"></script>
+    <script src="~/theme/js/jquery.textillate.js"></script>
+    <script src="~/theme/js/jquery.odometer.min.js"></script>
+    <script src="~/theme/js/jquery.appear.js"></script>
+    <script src="~/theme/js/owl.carousel.min.js"></script>
+    <script src="~/theme/js/jquery.countdown.min.js"></script>
+    <script src="~/theme/js/jquery.scrollUp.min.js"></script>
+    <script src="~/theme/js/imagesloaded.pkgd.min.js"></script>
+    <script src="~/theme/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/theme/js/plugins.js"></script>
+    <script src="~/theme/js/main.js"></script>
+
+    <script src="~/lib/jsgrid-1.5.3/jsgrid.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
