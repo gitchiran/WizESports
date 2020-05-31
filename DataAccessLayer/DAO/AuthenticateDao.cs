@@ -28,7 +28,7 @@ namespace DataAccessLayer.DAO
 
                 return isAuthenticated;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -43,7 +43,7 @@ namespace DataAccessLayer.DAO
                 i = db.SaveChanges();
                 return i > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

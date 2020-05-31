@@ -49,6 +49,7 @@ namespace Wiz_eSports_Management.Controllers
                     tournaments = _tournamentService.GetUpcomingTournaments();
                 }
 
+                ViewBag.UserRole = roleId;
                 return View(tournaments);
             }
             catch (Exception ex)

@@ -196,3 +196,18 @@ a {
 .sidebar-about-content .btn {
     color: #fff !important;
 }
+
+.tournament-txt {
+    width: 100% !important;
+    font-size: 36px !important;
+    border: none !important;
+    border-bottom: 3px solid rgba(255,255,255,.1) !important;
+    background: 0 0 !important;
+    color: #fff !important;
+    padding-bottom: 12px !important;
+    padding-right: 40px !important;
+}
+
+.dis-none{
+    display:none;
+}
