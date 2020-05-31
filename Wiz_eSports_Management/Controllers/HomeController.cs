@@ -230,9 +230,11 @@ namespace Wiz_eSports_Management.Controllers
 
                             _userService.UpdateLastLogin(user);
 
+                            TempData["UserRole"] = user.RoleId;
+
                             if (user.RoleId == 1)
                             {
-                                return RedirectToAction("Index", "Admin");
+                                return RedirectToAction("Index", "Tournament");
                             }
                             else
                             {
