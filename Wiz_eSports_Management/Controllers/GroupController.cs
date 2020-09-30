@@ -1,9 +1,13 @@
 ﻿using BusinessLogicLayer.Services;
+using DataAccessLayer.DAO;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Wiz_eSports_Management.Controllers
 {
@@ -38,11 +42,57 @@ namespace Wiz_eSports_Management.Controllers
             }
         }
 
+        public JsonResult GetTournamentGroups(int tournamentId)
+        {
+            try
+            {
+                var groups = _tournamentGroupService.GetTournamentGroups(tournamentId).ToList();
+
+                List<TournamentGroupData> tournamentgrouplst = new List<TournamentGroupData>();               
+
+                for (var i = 0; i < groups.Count(); i++)
+                {
+                    TournamentGroupData tournamentgroup = new TournamentGroupData();
+
+                    tournamentgroup.Id = groups[i].Id;
+                    tournamentgroup.GroupName = groups[i].GroupName;
+                    tournamentgroup.TournamentId = groups[i].TournamentId;
+                    tournamentgroup.CreatedDate = groups[i].CreatedDate;
+                    tournamentgroup.IsActive = groups[i].IsActive;
+
+                    tournamentgrouplst.Add(tournamentgroup);
+                }
+
+                return Json(tournamentgrouplst);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
+                return Json(new { status = 500, message = "error" });
+            }
+        }
+
+        public IActionResult TournamentGroups()
+        {
+            try
+            {
+                return PartialView("_TournamentGroups", null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
+                return NoContent();
+            }
+        }
+
         public JsonResult AddGroup(TournamentGroup tournamentGroup)
         {
             try
             {
                 bool isSaved = false;
+                tournamentGroup.IsActive = true;
                 isSaved = _tournamentGroupService.SaveTournamentGroup(tournamentGroup);
 
                 if (isSaved)
@@ -110,7 +160,7 @@ namespace Wiz_eSports_Management.Controllers
             }
         }
 
-        public IActionResult GetTournamentGroups(int tournamentId)
+        public IActionResult GetTournamentGroupsList(int tournamentId)
         {
             try
             {

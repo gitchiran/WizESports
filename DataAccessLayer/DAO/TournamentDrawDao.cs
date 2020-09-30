@@ -40,6 +40,41 @@ namespace DataAccessLayer.DAO
             }
         }
 
+        public IEnumerable<TournamentDraw> GetTournamentDrawDetails(int tournamentId, int? groupId, int teamId)
+        {
+            try
+            {
+                if(teamId>0)
+                {
+                    return db.TournamentDraw.Where(t => t.TournamentId == tournamentId && t.GroupId==groupId && t.TeamId==teamId && t.IsActive == true).Include(t => t.Tournament).Include(t => t.Tournament.TournamentGroup).Include(t => t.Team).ToList();
+                }
+                else if(groupId>0)
+                {
+                    return db.TournamentDraw.Where(t => t.TournamentId == tournamentId && t.GroupId == groupId && t.IsActive == true).Include(t => t.Tournament).Include(t => t.Tournament.TournamentGroup).Include(t => t.Team).ToList();
+                }
+                else
+                {
+                    return db.TournamentDraw.Where(t => t.TournamentId == tournamentId && t.IsActive == true).Include(t => t.Tournament).Include(t => t.Tournament.TournamentGroup).Include(t => t.Team).ToList();
+                }                
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public IEnumerable<TournamentDraw> GetTournamentTeamGroupDetails(int tournamentId, int teamId)
+        {
+            try
+            {
+                return db.TournamentDraw.Where(t => t.TournamentId == tournamentId && t.TeamId == teamId && t.IsActive == true).Include(t => t.Tournament).Include(t => t.Tournament.TournamentGroup).Include(t => t.Team).ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public TournamentDraw GetTournamentDraw(int drawId)
         {
             try

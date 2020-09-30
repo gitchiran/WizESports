@@ -20,7 +20,28 @@
                         }
                         <h3>@tournament.TournamentName</h3>
                         <h4><span> @dateString</span></h4>
-                        <p>@tournament.TournamentDescription</p>
+                        @{
+                            var TournamentDescription = tournament.TournamentDescription;
+                            var Text = "";
+                            if (TournamentDescription.Length > 70)
+                            {
+                                var TournamentDesc = "";
+                                var maxLength = 67;
+                                TournamentDesc = TournamentDescription.Substring(0, maxLength);
+
+                                ////Text = "<a onclick=FillUpcomingTournamentDetails(" + 0 + ") title='Click to view complete details.'><p id=lblTournamentDescription_" + 0 + " style='word-break: break-all;margin-bottom:0px;' value='" + TournamentDescription + "' >" + TournamentDesc + "<b><span class='lnk m-t-0'>...</span></b></p></a>";
+
+                                <a href="javascript:;" onclick="FillUpcomingTournamentDetails(0)" title="Click to view complete details."><p id=lblTournamentDescription_0 style="word-break: break-all;margin-bottom:0px;" value="@TournamentDescription">@TournamentDesc<b><span class="lnk m-t-0">...</span></b></p></a>
+                            }
+                            else
+                            {
+                                ////Text = "<p style='word-break: break-all;'>" + TournamentDescription + "</p>";
+
+                                <p style="word-break: break-all;">@TournamentDescription</p>;
+                            }
+                        }
+                        @*<p style="word-break: break-all;">@tournament.TournamentDescription</p>*@
+                        @Text
                         <div class="tournament-schedule-meta tournament-fee">
                             <h5>Entry Fee: <span>$@tournament.EntryFee</span></h5>
                         </div>

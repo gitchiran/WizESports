@@ -1,0 +1,88 @@
+﻿@model DataAccessLayer.Entities.Tournament
+
+<script>
+    $(document).ready(function () {
+
+        $('.datepicker').datepicker({
+            startDate: '+0d'
+        });
+
+        //////$('.datetimepicker').datetimepicker();
+
+        $('#edit-tournamnt-form').submit(function (e) {
+            e.preventDefault();
+            showMask();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: 'post',
+                url: '/Tournament/UpdateTournament',
+                data: formData,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    ClearControls('AdminTournament');
+                    ShowHideTournamentForm('HideEditForm');
+                    //////$('#tournament-edit-modal').modal('hide');
+
+                    //////$.get('/Tournament/GetTournaments', function (response) {
+                    //////    $('#tournament-section').html(response);
+                    //////    hideMask();
+                    //////});
+                },
+                error: function () {
+                    //Failed
+                }
+            });
+        });
+    });
+</script>
+
+<form id="edit-tournamnt-form">
+    <div class="row" style="padding:120px;">
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.Id, new { @placeholder = "Name", @id = "txtTournamentId", @class = "tournament-txt dis-none", @autocomplete = "off" })
+        </div>
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.IsActive, new { @placeholder = "Name", @id = "txtTournamentActive", @class = "tournament-txt dis-none", @autocomplete = "off" })
+        </div>
+
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.CreatedDate, new { @placeholder = "Name", @id = "txtTournamentCreatedDate", @class = "tournament-txt dis-none", @autocomplete = "off" })
+        </div>
+
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.CreatedBy, new { @placeholder = "Name", @id = "txtTournamentCreatedBy", @class = "tournament-txt dis-none", @autocomplete = "off" })
+        </div>
+
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.TournamentName, new { @placeholder = "Name", @id = "txtTournamentName", @class = "tournament-txt", @autocomplete = "off" })
+        </div>
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.SceduledDate, new { @placeholder = "Date", @id = "txtTournamentDate", @class = "datepicker tournament-txt", @autocomplete = "off", @readonly = "readonly" })
+        </div>
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.ContactPerson, new { @placeholder = "Contact", @id = "txtTournamentContact", @class = "tournament-txt", @autocomplete = "off" })
+        </div>
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.EntryFee, new { @placeholder = "Entry Fee", @onkeyup = "ValidateNumber(this,2)", @id = "txtTournamentEntryFee", @class = "tournament-txt", @autocomplete = "off" })
+        </div>
+        <div class="col-lg-12">
+            @Html.TextAreaFor(m => m.TournamentDescription, new { @placeholder = "Description", @id = "txtTournamentDesc", @class = "tournament-txt", @rows = "3", @autocomplete = "off" })
+        </div>
+
+        <div class="col-lg-6">
+            @Html.TextBoxFor(m => m.EndDate, new { @placeholder = "Name", @id = "txtTournamentEndDate", @class = "tournament-txt dis-none", @autocomplete = "off" })
+        </div>
+    </div>
+    <div class="row modal-form-buttons">
+        <div class="col-lg-6">
+            <button type="submit" id="tournament-form-submit-btn" class="btn btnAdd float-right">Update</button>
+        </div>
+        <div class="col-lg-6">
+            <button type="reset" class="btn btnCancel float-left" onclick="ShowHideTournamentForm('HideEditForm');">Cancel</button>
+        </div>
+    </div>
+</form>

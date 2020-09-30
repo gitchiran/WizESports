@@ -25,7 +25,17 @@ namespace BusinessLogicLayer.Services
         {
             return _tournamentDao.GetUpcomingTournaments();
         }
+        public IEnumerable<Tournament> GetUpcomingTournamentbySchedule()
+        {
+            return _tournamentDao.GetUpcomingTournamentbySchedule();
+        }
 
+        public IEnumerable<TournamentTeam> GetTeamTournaments(int TeamId)
+        {
+            return _tournamentDao.GetTeamTournaments(TeamId);
+        }
+
+        
         public Tournament GetTournament(int tournamentId)
         {
             return _tournamentDao.GetTournament(tournamentId);
@@ -65,6 +75,46 @@ namespace BusinessLogicLayer.Services
             {
                 return false;
             }
+        }
+
+        public bool UpdateTournamentEndDate(int tournamentId,string EndDate)
+        {
+            if (tournamentId > 0)
+            {
+                return _tournamentDao.UpdateTournamentEndDate(tournamentId, EndDate);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool SaveTournamentDraw(TournamentDraw tournamentDraw)
+        {
+            if (tournamentDraw != null)
+            {
+                return _tournamentDao.SaveTournamentDraw(tournamentDraw);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool DeleteTournamentDraw(int DrawId)
+        {
+            if (DrawId > 0)
+            {
+                return _tournamentDao.DeleteTournamentDraw(DrawId);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetEnrollmentStatus(int tournamentId, int TeamId)
+        {
+            return _tournamentDao.GetEnrollmentStatus(tournamentId, TeamId);
         }
     }
 }

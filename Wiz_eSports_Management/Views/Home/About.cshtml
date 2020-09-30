@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- breadcrumb-area -->
+<!-- breadcrumb - area -->
 <section class="breadcrumb-area breadcrumb-bg">
     <div class="container">
         <div class="row">
@@ -23,9 +23,9 @@
         </div>
     </div>
 </section>
-<!-- breadcrumb-area-end -->
-<!-- inner-about-area -->
-<section class="inner-about-area fix">
+<!-- breadcrumb - area - end -->
+<!-- inner - about - area -->
+    <section class="inner-about-area fix">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-xl-7 col-lg-6 order-0 order-lg-2">
@@ -37,16 +37,28 @@
             </div>
             <div class="col-xl-5 col-lg-6">
                 <div class="section-title title-style-three mb-25">
-                    <h2>released <span>GAMES</span></h2>
+                    <h2>ABOUT <span>US</span></h2>
                 </div>
-                <div class="inner-about-content">
-                    <h5>Monica Global Publishing for Marketing</h5>
+                <div class="inner-about-content" style="padding-bottom:0px;">
                     <p>
-                        Compete with 100 players on a remote Lorem Ipsn gravida. Pro ain gravida nibh vel velit an auctor aliqueenean
-                        ollicitudin ain gravida nibh vel version an ipsum.
+                        Our vision is to find, create, and unleash the heroes who pursue dreams with higher strength, and that will inspire the world with new hope and inspiration.
                     </p>
-                    <p>Lorem Ipsn gravida. Pro ain gravida nibh vevelit auctor aliqueenean ollicitudin ain gravida nibh vel version an ipsum.</p>
-                    <a href="#" class="btn btn-style-two">BUY THEME</a>
+                    <p>
+                        Trecco will celebrate the excitement and excitement of everything and bring you the latest news, reviews, features, leads, and in-depth stories about gamers, teams, and fans.
+                    </p>
+                    <h5>OUR VALUES</h5>
+                    <ul style="color: #6c6c6c;">
+                        <li style="list-style:initial">Completeness: - When playing casual or competitive gaming, follow the sportsbooks and code of conduct. </li>
+                        <li style="list-style:initial">Decency: -  Be humble. All players are the same. No one is less than the other. </li>
+                        <li style="list-style:initial">Honorable: - Always do the right thing, regardless of the potential consequences.</li>
+                        <li style="list-style:initial">Revere: - Show appreciation and acceptance to your fellow players. Don’t speak badly about your teammates, opponents, or anyone else.</li>
+                        <li style="list-style:initial">Chivalry: - Fight, no matter how bad. The best story in the game is the return.</li>
+                        <li style="list-style:initial">Discipline: - Grind for your purposes. Create new goals as you become more successful. Push yourself to be a better player. Grit counts. </li>
+                        <li style="list-style:initial">Clemency: - Educate your fellow players. Our sport is young, and we should focus on improving the ecosystem. Try to keep all boats at bay.</li>
+                    </ul>
+                    <p class="m-t-10">
+                        We are the best.
+                    </p>
                 </div>
             </div>
         </div>
@@ -55,7 +67,10 @@
 </section>
 <!-- inner-about-area-end -->
 <!-- latest-match-area -->
-<section class="latest-match-area latest-match-bg pt-115 pb-90">
+
+
+
+@*<section class="latest-match-area latest-match-bg pt-115 pb-90">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-8">
@@ -131,10 +146,10 @@
             </div>
         </div>
     </div>
-</section>
+</section>*@
 <!-- latest-match-area-end -->
 <!-- team-member -->
-<section class="team-member-area pt-115 pb-125">
+@*<section class="team-member-area pt-115 pb-125">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-8">
@@ -226,5 +241,12 @@
             </div>
         </div>
     </div>
-</section>
+</section>*@
 <!-- team-member-end -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            PageActive("liAbout");
+        });
+    </script>
+}

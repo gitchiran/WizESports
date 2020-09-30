@@ -1,0 +1,105 @@
+﻿@model DataAccessLayer.Entities.TournamentGroupData
+
+<script>
+    $(document).ready(function () {
+        var tournamentId = getUrlVars()["tournamentId"];
+        $.get('/Group/GetTournamentGroups?tournamentId=' + tournamentId, function (response) {
+            BindDropdownData(response, 'TournamentData_Group');
+        });
+
+
+        $("#TournamentGroupTable").jsGrid({
+            height: "auto",
+            width: "100%",
+
+            filtering: false,
+            editing: true,
+            sorting: true,
+            paging: true,
+            inserting: true,
+            autoload: true,
+
+            pageSize: 15,
+            pageButtonCount: 5,
+
+            deleteConfirm: "Do you really want to delete the Group?",
+
+            controller: {
+                loadData: function (filter) {
+                    return $.ajax({
+                        url: "/Group/GetTournamentGroups",
+                        dataType: "json",
+                        data: { "tournamentId": tournamentId }
+                    });
+                }
+            },
+
+            fields: [
+                { name: "groupName", type: "text", width: 350, title: "Group Name" },
+                { type: "control" }
+            ],
+
+            onItemInserted: function (args) {
+                debugger;
+                // cancel insertion of the item with empty 'name' field
+                let valid = true;
+
+                valid = ValidateData(args, 'TournamentGroups');
+
+                args.item.tournamentId = tournamentId;
+
+                if (valid) {
+                    $.ajax({
+                        url: "/Group/AddGroup",
+                        dataType: "json",
+                        data: args.item,
+                        success: function () {
+                            console.log('success');
+                        }
+                    });
+                }
+            },
+
+            onItemUpdated: function (args) {
+                // cancel editing of the row of item with field 'ID' = 0
+                let valid = true;
+                valid = ValidateData(args, 'TournamentGroups');
+                if (valid) {
+                    if (args.item.ID === 0) {
+                        args.cancel = true;
+                    } else {
+                        $.ajax({
+                            url: "/Group/UpdateGroup",
+                            dataType: "json",
+                            data: args.item,
+                            success: function () {
+                                console.log('success');
+                            }
+                        });
+                    }
+                }
+            },
+
+            onItemDeleted: function (args) {
+                // cancel deletion of the item with 'protected' field
+                if (args.item.protected) {
+                    args.cancel = true;
+                }
+                else {
+                    $.ajax({
+                        url: "/Group/DeleteGroup",
+                        dataType: "json",
+                        data: { "groupId": args.item.id },
+                        success: function () {
+                            console.log('success');
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+
+<div class="col-lg-12 col-md-12 m-t-10">
+    <table id="TournamentGroupTable"></table>
+</div>

@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            PageActive("liDraw");
+            BindData('LastDrawDetails_Index');
+        });
+    </script>
+}
+
+<!-- breadcrumb-area -->
+@*<section class="breadcrumb-area breadcrumb-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-content text-center">
+                        <h2>contact <span>info</span></h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#">pages</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">contact</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>*@
+
+<div class="">
+    <div class="container">
+        <div class="col-lg-12 m-t-30 mb-30 nopadding">
+            <h2 id="TournamentName" class="btn-black"></h2>
+            <div id="divDrawDetails" class="row col-lg-12 m-t-30">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- brand-area-end -->

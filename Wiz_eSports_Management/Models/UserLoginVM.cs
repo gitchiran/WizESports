@@ -10,5 +10,6 @@ namespace Wiz_eSports_Management.Models
         [Required(ErrorMessage = "Please enter a valid password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

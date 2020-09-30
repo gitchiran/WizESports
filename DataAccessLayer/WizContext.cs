@@ -42,6 +42,7 @@ namespace DataAccessLayer
         public virtual DbSet<TournamentTeam> TournamentTeam { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
+        public virtual DbSet<AdminSettings> AdminSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -216,7 +217,12 @@ namespace DataAccessLayer
                     .WithMany(p => p.TournamentDraw)
                     .HasForeignKey(d => d.TournamentId)
                     .HasConstraintName("FK_TournamentDraw_Tournament");
-            });
+
+                entity.HasOne(d => d.Team)
+                    .WithMany(p => p.TournamentDraw)
+                    .HasForeignKey(d => d.TeamId)
+                    .HasConstraintName("FK_TeamTournamentDraw_Team");
+        });
 
             modelBuilder.Entity<TournamentGroup>(entity =>
             {
@@ -300,6 +306,14 @@ namespace DataAccessLayer
                     .HasColumnName("UserRole")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<AdminSettings>(entity =>
+            {
+                entity.Property(e => e.YoutubeUrl)
+                    .HasColumnName("YoutubeUrl")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);               
             });
         }
     }

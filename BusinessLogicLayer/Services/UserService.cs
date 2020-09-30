@@ -38,6 +38,11 @@ namespace BusinessLogicLayer.Services
             return _userDao.GetUser(username, password);
         }
 
+        public User GetUserByUserName(string username)
+        {
+            return _userDao.GetUserByUserName(username);
+        }
+
         public User GetUserByEmail(string email)
         {
             return _userDao.GetUserByEmail(email);
@@ -47,7 +52,6 @@ namespace BusinessLogicLayer.Services
         {
             return _userDao.LockUser(username);
         }
-
         public int SaveUser(User user)
         {
             if(user != null)
@@ -59,6 +63,19 @@ namespace BusinessLogicLayer.Services
                 return 0;
             }
             
+        }
+
+        public int ValidateUser(User user)
+        {
+            if (user != null)
+            {
+                return _userDao.ValidateUser(user);
+            }
+            else
+            {
+                return 0;
+            }
+
         }
 
         public bool UpdateUser(User user)

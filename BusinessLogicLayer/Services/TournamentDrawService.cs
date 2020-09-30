@@ -26,6 +26,16 @@ namespace BusinessLogicLayer.Services
             return _tournamentDrawDao.GetTournamentDraws(tournamentId);
         }
 
+        public IEnumerable<TournamentDraw> GetTournamentDrawDetails(int tournamentId, int? groupId, int teamId)
+        {
+            return _tournamentDrawDao.GetTournamentDrawDetails(tournamentId, groupId, teamId);
+        }
+
+        public IEnumerable<TournamentDraw> GetTournamentTeamGroupDetails(int tournamentId, int teamId)
+        {
+            return _tournamentDrawDao.GetTournamentTeamGroupDetails(tournamentId, teamId);
+        }
+
         public TournamentDraw GetTournamentDraw(int drawId)
         {
             return _tournamentDrawDao.GetTournamentDraw(drawId);

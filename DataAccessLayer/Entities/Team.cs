@@ -32,5 +32,6 @@ namespace DataAccessLayer.Entities
         public ICollection<Player> Player { get; set; }
         public ICollection<TeamTournamentGroup> TeamTournamentGroup { get; set; }
         public ICollection<TournamentTeam> TournamentTeam { get; set; }
+        public ICollection<TournamentDraw> TournamentDraw { get; set; }
     }
 }

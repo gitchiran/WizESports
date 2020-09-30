@@ -13,5 +13,6 @@ namespace Wiz_eSports_Management.Models.Configurations
         public int AuthorizationExpiryDays { get; set; }
         public string VersionNo { get; set; }
         public string VersionDate { get; set; }
+        public string SendToEmail { get; set; }
     }
 }

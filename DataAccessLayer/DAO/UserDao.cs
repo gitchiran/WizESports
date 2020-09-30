@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace DataAccessLayer.DAO
 {
-    public class UserDao: BaseDao
+    public class UserDao : BaseDao
     {
         private readonly IConfiguration _configuration;
 
@@ -64,6 +64,18 @@ namespace DataAccessLayer.DAO
             }
         }
 
+        public User GetUserByUserName(string username)
+        {
+            try
+            {
+                return db.User.FirstOrDefault(u => u.Username.Equals(username));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public User GetUserByEmail(string email)
         {
             try
@@ -82,7 +94,7 @@ namespace DataAccessLayer.DAO
             {
                 int isLocked = 0;
                 var user = db.User.FirstOrDefault(u => u.Username.Equals(username));
-                if(user != null)
+                if (user != null)
                 {
                     user.IsLocked = true;
                     db.User.Update(user);
@@ -110,6 +122,24 @@ namespace DataAccessLayer.DAO
                 }
 
                 return userId;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        public int ValidateUser(User user)
+        {
+            try
+            {
+                int userCount = 0;
+                if (user != null)
+                {
+                    userCount = db.User.Where(x => x.Email == user.Email || x.Username == user.Username).Count();
+                }
+
+                return userCount;
             }
             catch (Exception)
             {
@@ -147,10 +177,10 @@ namespace DataAccessLayer.DAO
                     user.IsActive = false;
                     db.User.Update(user);
 
-                    if(user.RoleId == 2)
+                    if (user.RoleId == 2)
                     {
                         var team = db.Team.FirstOrDefault(e => e.UserId == userId);
-                        if(team != null)
+                        if (team != null)
                         {
                             team.IsActive = false;
                             db.Team.Update(team);
@@ -173,8 +203,8 @@ namespace DataAccessLayer.DAO
             try
             {
                 int isPasswordReset = 0;
-                User user = db.User.FirstOrDefault(u => u.Email.Equals(reset.Username));
-                if(user != null)
+                User user = db.User.FirstOrDefault(u => u.Username.Equals(reset.Username));
+                if (user != null)
                 {
                     user.Password = reset.Password;
                     user.Token = string.Empty;

@@ -57,6 +57,7 @@ namespace Wiz_eSports_Management.Controllers
 
         public IActionResult Login()
         {
+            _session.SetSession("LoginError", "");
             return View();
         }
 
@@ -71,6 +72,11 @@ namespace Wiz_eSports_Management.Controllers
         }
 
         public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public IActionResult Draw()
         {
             return View();
         }
@@ -90,10 +96,16 @@ namespace Wiz_eSports_Management.Controllers
             return View();
         }
 
+        public IActionResult ResetPasswordPage()
+        {
+            return View();
+        }
+
         public JsonResult UserRegistration(IList<IFormFile> teamLogoFile, UserRegistrationVM userRegistrationVM)
         {
             try
             {
+                int UserExists = 0;
                 string token = Guid.NewGuid().ToString();
 
                 User user = new User();
@@ -106,47 +118,63 @@ namespace Wiz_eSports_Management.Controllers
                 user.IsLocked = false;
                 user.IsVerified = false;
                 user.RegisteredDate = DateTime.UtcNow;
+                user.PhoneNumber = userRegistrationVM.ContactPhone;
 
-                int userId = _userService.SaveUser(user);
+                UserExists = _userService.ValidateUser(user);
 
-                ContactPerson contactPerson = new ContactPerson();
-                contactPerson.Cpname = userRegistrationVM.ContactName;
-                contactPerson.Email = string.IsNullOrEmpty(userRegistrationVM.ContactEmail) ? userRegistrationVM.Email : userRegistrationVM.ContactEmail;
-                contactPerson.Nic = userRegistrationVM.ContactNic;
-                contactPerson.PhoneNumber = userRegistrationVM.ContactPhone;
-
-                int contactId = _contactPersonService.SaveContactPerson(contactPerson);
-
-                string filePath = _hostEnvironment.WebRootPath + $@"/UserContent/Teams/{user.Id}";
-                string Attachments = WizFileHandling.UploadAttachments(teamLogoFile, filePath, true);
-
-                Team team = new Team();
-                team.TeamName = userRegistrationVM.TeamName;
-                team.TeamDescription = userRegistrationVM.TeamName;
-                team.LogoPath = Attachments;
-                team.IsActive = true;
-                team.RegistrationDate = DateTime.UtcNow;
-                team.UserId = userId;
-                team.ContactPerson = contactId;
-
-                _teamService.SaveTeam(team);
-
-                bool emailSent = false;
-
-                if (userId > 0 && !string.IsNullOrEmpty(user.Password))
+                if (userRegistrationVM.TandC == false)
                 {
-                    string body = "<p>Hi " + user.Username + ", " +
-                        "<br> Please use the following link to verify your email and activate your wiz account" +
-
-                        "<br><br><a href='" + _configSettings.URLApplication.ToString() + "User/ActivateUser?id=" + Crypto.Encrypt(user.Email) + "'> Activate My Wix Account </a>" +
-
-                        "<br><br> Thank you for using Wiz, Have an awesome day.";
-
-
-                    emailSent = Email.SendEmail(user.Email, _smptConfiguration.User, "Wiz - Email Verfication", body, _smptConfiguration.Pass, _smptConfiguration.Server, _smptConfiguration.Port);
+                    return Json(new { status = 202 });
                 }
+                else
+                {
+                    if (UserExists == 0)
+                    {
+                        int userId = _userService.SaveUser(user);
 
-                return Json(new { status = 200, userId = user.Id, emailSent = emailSent, emailAddress = user.Email });
+                        ContactPerson contactPerson = new ContactPerson();
+                        contactPerson.Cpname = userRegistrationVM.ContactName;
+                        contactPerson.Email = string.IsNullOrEmpty(userRegistrationVM.ContactEmail) ? userRegistrationVM.Email : userRegistrationVM.ContactEmail;
+                        contactPerson.Nic = userRegistrationVM.ContactNic;
+                        contactPerson.PhoneNumber = userRegistrationVM.ContactPhone;
+
+                        int contactId = _contactPersonService.SaveContactPerson(contactPerson);
+
+                        string filePath = _hostEnvironment.WebRootPath + $@"/UserContent/Teams/{user.Id}";
+                        string Attachments = WizFileHandling.UploadAttachments(teamLogoFile, filePath, true);
+
+                        Team team = new Team();
+                        team.TeamName = userRegistrationVM.TeamName;
+                        team.TeamDescription = userRegistrationVM.TeamName;
+                        team.LogoPath = Attachments;
+                        team.IsActive = true;
+                        team.RegistrationDate = DateTime.UtcNow;
+                        team.UserId = userId;
+                        team.ContactPerson = contactId;
+
+                        _teamService.SaveTeam(team);
+
+                        bool emailSent = false;
+
+                        if (userId > 0 && !string.IsNullOrEmpty(user.Password))
+                        {
+                            string body = "<p>Hi " + user.Username + ", " +
+                                "<br> Please use the following link to verify your email and activate your Trecco account" +
+
+                                "<br><br><a href='" + _configSettings.URLApplication.ToString() + "User/ActivateUser?id=" + Crypto.Encrypt(user.Email) + "'> Activate My Trecco Account </a>" +
+
+                                "<br><br> Thank you for using Trecco, Have an awesome day.";
+
+                            emailSent = Email.SendEmail(user.Email, _smptConfiguration.User, "Trecco - Email Verfication", body, _smptConfiguration.Pass, _smptConfiguration.Server, _smptConfiguration.Port);
+                        }
+
+                        return Json(new { status = 200, userId = user.Id, emailSent = emailSent, emailAddress = user.Email });
+                    }
+                    else
+                    {
+                        return Json(new { status = 201 });
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -156,17 +184,18 @@ namespace Wiz_eSports_Management.Controllers
             }
         }
 
-        public JsonResult ResetPassword(UserLoginVM userLoginVM)
+        public JsonResult ResetPassword(string UserName, string Password)
         {
             try
             {
 
-                if (!string.IsNullOrEmpty(userLoginVM.Password))
+                if (!string.IsNullOrEmpty(Password))
                 {
+                    ////UserName = Crypto.Decrypt(UserName);
                     PasswordReset reset = new PasswordReset()
                     {
-                        Password = Crypto.ComputeHash(userLoginVM.Password),
-                        Username = userLoginVM.Username
+                        Password = Crypto.ComputeHash(Password),
+                        Username = UserName
                     };
 
                     bool updated = _userService.ResetPassword(reset);
@@ -185,23 +214,73 @@ namespace Wiz_eSports_Management.Controllers
             }
         }
 
+        public JsonResult ResetPasswordLink(string UserName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(UserName))
+                {
+                    bool emailSent = false;
+                    User UserDetails = _userService.GetUserByUserName(UserName);
+
+                    if (UserDetails != null)
+                    {
+                        string body = "<p>Hi " + UserName + ", " +
+                            "<br> Please use the following link to reset your password" +
+
+                            "<br><br><a href='" + _configSettings.URLApplication.ToString() + "Home/ResetPasswordPage?id=" + UserName + "'> Reset Password </a>" +
+
+                            "<br><br> Thank you for using Trecco, Have an awesome day.";
+
+                        emailSent = Email.SendEmail(UserDetails.Email, _smptConfiguration.User, "Trecco - Reset Password", body, _smptConfiguration.Pass, _smptConfiguration.Server, _smptConfiguration.Port);
+
+                        return Json(new { status = 200, emailSent = emailSent });
+                    }
+                    else
+                    {
+                        return Json(new { status = 201 });
+                    }
+                }
+
+                return Json(new { status = 202 });
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
+                return Json(new { status = 500, updated = false });
+            }
+        }
+
         public async Task<ActionResult> UserLogin(UserLoginVM userVM)
         {
             try
             {
+                string LoginErrorMsg = "";
                 if (ModelState.IsValid)
                 {
                     string hashedPassword = Crypto.ComputeHash(userVM.Password);
 
                     bool isAuthenticated = _authenticateService.Authenticate(userVM.Username, hashedPassword);
 
-                    if (isAuthenticated)
+                    bool IsNotVerified = _authenticateService.IsNotVerified(userVM.Username, hashedPassword);
+
+                    if (IsNotVerified)
+                    {
+                        ////ModelState.AddModelError("LoginError", "User needs to verify");
+
+                        LoginErrorMsg = "User needs to verify";
+                    }
+                    else if (isAuthenticated)
                     {
                         var user = _userService.GetUser(userVM.Username, hashedPassword);
 
                         if (user.IsLocked.HasValue && user.IsLocked.Value)
                         {
-                            ModelState.AddModelError("", "Your account has been blocked! Check your email to unlock it.");
+                            ////ModelState.AddModelError("LoginError", "Your account has been blocked! Check your email to unlock it.");
+
+                            LoginErrorMsg = "Your account has been blocked! Check your email to unlock it.";
                         }
                         else
                         {
@@ -234,10 +313,12 @@ namespace Wiz_eSports_Management.Controllers
 
                             if (user.RoleId == 1)
                             {
+                                LoginErrorMsg = "";
                                 return RedirectToAction("Index", "Tournament");
                             }
                             else
                             {
+                                LoginErrorMsg = "";
                                 return RedirectToAction("Home", "Team");
                             }
                         }
@@ -248,13 +329,26 @@ namespace Wiz_eSports_Management.Controllers
 
                         if (isLocked)
                         {
-                            ModelState.AddModelError("", "Your account has been locked!.Please check your email to unlock the account.");
+                            //////ModelState.AddModelError("", "Your account has been locked!.Please check your email to unlock the account.");
+                            LoginErrorMsg = "Your account has been locked!.Please check your email to unlock the account.";
+                            //////_session.SetSession("LoginError", "Your account has been locked!.Please check your email to unlock the account.");
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Authentication Failed");
+                            //////ModelState.AddModelError("", "Authentication Failed");
+
+                            /////_session.SetSession("LoginError", "Authentication Failed");
+
+                            LoginErrorMsg = "Authentication Failed";
                         }
                     }
+
+                    LoggedUser loggedUserErrorMsg = new LoggedUser()
+                    {
+                        LoginError = LoginErrorMsg
+                    };
+
+                    _session.SetSession("loggedUserErrorMsg", loggedUserErrorMsg);
                 }
 
                 return RedirectToAction("Login", "Home", userVM);
@@ -292,7 +386,7 @@ namespace Wiz_eSports_Management.Controllers
                     if (count >= maxUnsuccessfullyAttemptsGranted)
                     {
                         bool isLocked = _userService.LockUser(user.Username);
-                        if(isLocked)
+                        if (isLocked)
                         {
                             string subject = "Your Wiz Account is locked";
                             string encriptedEmail = Crypto.Encrypt(user.Email);
