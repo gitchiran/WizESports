@@ -11,6 +11,11 @@ a {
     margin: 0 auto;
 }
 
+.IndexPageTableHeader {
+    background: #1B1024 !important;
+    border:none!important;
+}
+
     .login-form input {
         background: transparent;
         color: #fff;
@@ -195,4 +200,81 @@ a {
 
 .sidebar-about-content .btn {
     color: #fff !important;
+}
+
+.tournament-txt {
+    width: 100% !important;
+    font-size: 36px !important;
+    border: none !important;
+    border-bottom: 3px solid rgba(255,255,255,.1) !important;
+    background: 0 0 !important;
+    color: #fff !important;
+    padding-bottom: 12px !important;
+    padding-right: 40px !important;
+}
+
+.dis-none{
+    display:none;
+}
+
+.logodimensions {
+    /*    width: 150px;
+    height: 45px;*/
+    width: 200px;
+    height: 50px;
+}
+
+.logodimensions_Inner {
+    width: 200px;
+    height: 70px;
+}
+
+#cover-spin {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.7);
+    z-index: 9999;
+    display: none;
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#cover-spin::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    top: 40%;
+    /*width:50px;height:50px;*/
+    width: 80px;
+    height: 80px;
+    border-style: solid;
+    border-color: #d3ba72;
+    border-top-color: transparent;
+    border-width: 8px;
+    border-radius: 50%;
+    -webkit-animation: spin .8s linear infinite;
+    animation: spin .8s linear infinite;
 }

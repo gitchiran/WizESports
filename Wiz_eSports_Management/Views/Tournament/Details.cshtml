@@ -9,8 +9,91 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            //////$.datetimepicker.setLocale('en');
 
+            //////$('#datetimepicker1').datetimepicker({
+            //////    datepicker: false,
+            //////    format: 'H:i',
+            //////    step: 5
+            //////});
+
+            var tournamentId = getUrlVars()["tournamentId"];
+            GetEnrollmentStatus();
+            GetTournamentEndDate();
+            $('.enroll-button').click(function () {
+                debugger;
+                $.get('/Tournament/EnrollTournamentPopup', function (response) {
+                    $('#enrollment-details-modal').html(response);
+                    $('#enrollment-details-modal').modal('show');
+                });
+            });
+
+            $.get('/Group/TournamentGroups', function (response) {
+                $('#TournamentGroupTableMain').html(response);
+            });
+
+            BindRegisteredTournamentTeamsTable();
+            BindRegisteredTournamentDraw(0, 0);
+            BindRegisteredTournamentMatchTeamsTable(0);
+            window.Search = $('.search-box').SumoSelect({ csvDispCount: 3, search: true, searchText: 'Enter here.' });
+            $('#cmbTeam').SumoSelect({ triggerChangeCombined: true, placeholder: "TestPlaceholder", csvDispCount: 3, search: true, searchText: 'Enter here.', okCancelInMulti: true });
+
+            $('.edit-new-button').click(function () {
+                $.get('/Tournament/EditTournamentPopup?TournamentId=' + tournamentId, function (response) {
+                    $('#tournament-edit-modal').html(response);
+                    $('#tournament-edit-modal').modal('show');
+                });
+            });
+
+            var TDesc = $('#pTournamentDescription').text();
+            TDesc = TDesc.trim().replace(/(?:\\[rn])+/g, "");
+            $('#pTournamentDescription').html(TDesc);
+
+
+            //Temporary section for Tournament Enroll-START
+            var tournamentId = getUrlVars()["tournamentId"];
+            $('#TournamentId').val(tournamentId);
+            $('.datepicker').datepicker({
+                startDate: '+0d'
+            });
+
+            $('#create-enrollment-form').submit(function (e) {
+                debugger;
+                e.preventDefault();
+
+                let valid = true;
+
+                ////valid = ValidateData('', 'UserEnrollment');
+
+
+                if (valid == true) {
+                    showMask();
+
+                    let formData = new FormData(this);
+
+                    $.ajax({
+                        type: 'post',
+                        url: '/Tournament/Enroll',
+                        data: formData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+                        success: function (result) {
+                            DisplaySuccessModal('lblMessage', 'myModal', 'Enrolled Successfully.');
+                            $('#enrollment-details-modal').modal('hide');
+                            hideMask();
+                            location.reload();
+                        },
+                        error: function () {
+                            //Failed
+                        }
+                    });
+                }
+            });
+
+            //Temporary section for Tournament Enroll-END
         });
+
     </script>
 }
 
@@ -35,51 +118,246 @@
 <!-- breadcrumb-area-end -->
 <!-- blog-area -->
 <section class="blog-area primary-bg pt-120 pb-175">
-    <div class="container">
+    <div class="container width90">
         <div class="row">
             <div class="col-lg-8">
-                <div class="blog-list-post blog-details-wrap">
-                    <div class="blog-list-post-content">
-                        <div class="blog-list-post-tag mb-25">
-                            @{
-                                var dateString = string.Empty;
-                                if (Model.SceduledDate.HasValue)
-                                {
-                                    dateString = Model.SceduledDate.Value.ToString("MMMM dd, yyyy");
-                                }
-                            }
-                            <a href="#">@dateString</a>
-                        </div>
-                        <h2>@Model.TournamentName</h2>
-                        <div class="blog-meta">
-                            @{
-                                dateString = string.Empty;
-                                if (Model.CreatedDate.HasValue)
-                                {
-                                    dateString = Model.CreatedDate.Value.ToString("MMMM dd, yyyy");
-                                }
-                            }
-                            <ul>
-                                <li>Created On @dateString</li>
-                            </ul>
-                        </div>
-                        <p>
-                            @Model.TournamentDescription
-                        </p>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="blog-details-img">
-                                    <img src="img/blog/blog_details_img01.jpg" alt="">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Tournament Details</a>
+
+                        @if (ViewBag.UserRole == 1)
+                        {
+                            <a class="nav-item nav-link" id="nav-registeredteams-tab" data-toggle="tab" href="#nav-registeredteams" role="tab" aria-controls="nav-registeredteams" aria-selected="true">Registered Teams</a>
+                            <a class="nav-item nav-link" id="nav-tournamentgroups-tab" data-toggle="tab" href="#nav-tournamentgroups" role="tab" aria-controls="nav-tournamentgroups" aria-selected="false">Tournament Groups</a>
+                            <a class="nav-item nav-link" id="nav-tournamentdraw-tab" data-toggle="tab" href="#nav-tournamentdraw" role="tab" aria-controls="nav-tournamentdraw" aria-selected="false">Tournament Draw</a>
+                            <a class="nav-item nav-link" id="nav-tournamentmatch-tab" data-toggle="tab" href="#nav-tournamentmatch" role="tab" aria-controls="nav-tournamentmatch" aria-selected="false">Match Scores</a>
+                        }
+                        @*<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>*@
+                    </div>
+                </nav>
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="blog-list-post blog-details-wrap">
+                            <div class="blog-list-post-content">
+                                <div class="blog-list-post-tag mb-25">
+                                    @{
+                                        var dateString = string.Empty;
+                                        if (Model.SceduledDate.HasValue)
+                                        {
+                                            dateString = Model.SceduledDate.Value.ToString("MMMM dd, yyyy");
+                                        }
+                                    }
+                                    <a href="#">@dateString</a>
                                 </div>
+                                <h2 id="spnTournamentName">@Model.TournamentName</h2>
+                                <div class="blog-meta">
+                                    @{
+                                        dateString = string.Empty;
+                                        if (Model.CreatedDate.HasValue)
+                                        {
+                                            dateString = Model.CreatedDate.Value.ToString("MMMM dd, yyyy");
+                                        }
+                                    }
+                                    <ul>
+                                        <li>Created On @dateString</li>
+                                    </ul>
+                                </div>
+                                <h2>Tournament Admin: @Model.ContactPerson</h2>
+                                <p id="pTournamentDescription" style='word-break: break-all;white-space: pre-wrap;'>
+                                    @Model.TournamentDescription
+                                </p>
+                                @*<div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="blog-details-img">
+                                            <img src="img/blog/blog_details_img01.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="blog-details-img">
+                                            <img src="img/blog/blog_details_img02.jpg" alt="">
+                                        </div>
+                                    </div>
+                                </div>*@
                             </div>
-                            <div class="col-sm-6">
-                                <div class="blog-details-img">
-                                    <img src="img/blog/blog_details_img02.jpg" alt="">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-registeredteams" role="tabpanel" aria-labelledby="nav-registeredteams-tab">                        
+                        <div class="col-lg-12 nopadding">
+                            <div class="blog-list-post blog-details-wrap">
+                                <div class="blog-list-post-content">
+                                    <div class="col-md-12 col-lg-12 text-left m-t-10 nopadding">
+                                        <button type="button" id="btnExportRegisteredTeams" style="font-size:15px!important;" onclick="DownloadRegisteredTeams()" class="btn btnAdd">Export Data</button>
+                                    </div>
+
+                                    <table id="tblTTD" class="col-lg-12 jsgrid-table m-t-20">
+                                        <thead>
+                                            <tr class="TableHeaderOuter jsgrid-header-row">
+                                                <th class="jsgrid-header-cell" style="display:none">ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Tournament ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Team ID</th>
+                                                <th class="borderradiustopleft jsgrid-header-cell">Team Name</th>
+                                                <th class="jsgrid-header-cell">Enrollment Date</th>
+                                                <th class="jsgrid-header-cell">Payment Type</th>
+                                                <th class="jsgrid-header-cell">Payment Made</th>
+                                                <th class="jsgrid-header-cell">Payment Proof</th>
+                                                <th class="jsgrid-header-cell">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblTTD_tbody" class="col-lg-12">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="nav-tournamentgroups" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        @*<div class="col-lg-12">
+                                <a id="add-new-group" class="add-new-button float-right m-t-10 btn-black"><i class="fas fa-plus"></i> Add New Group</a>
+                            </div>*@
+                        <div class="col-lg-12 nopadding">
+                            <div class="blog-list-post blog-details-wrap">
+                                <div class="blog-list-post-content">
+                                    <table id="TournamentGroupTableMain"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-tournamentdraw" role="tabpanel" aria-labelledby="nav-tournamentdraw-tab">
+                        <div class="col-lg-12 nopadding">
+                            <div class="blog-list-post blog-details-wrap">
+                                <div class="blog-list-post-content">
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-4">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Group</label>
+                                            <div id="divGroup">
+                                                <select id="cmbGroup" onchange="SelectChange(this)" placeholder="Hello  im from placeholder" class="search-box">
+                                                    <option selected value="0">--Select--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-lg-4">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Team</label><span class="MandatoryField">*</span>
+                                            <div id="divTeam">
+                                                <select multiple="multiple" id="cmbTeam" onchange="SelectChange(this)" placeholder="Please select Team"></select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4 col-lg-4">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Date</label><span class="MandatoryField">*</span>
+                                            @*<input autocomplete="off" class="datetimepicker form-control" id="txtMatchDate" name="txtMatchDate" placeholder="Match Date" readonly="readonly" type="text" value="">*@
+                                            <input type="datetime-local" id="txtMatchDate" name="txtMatchDate" class="form-control" placeholder="Match Date">
+                                            @*<input type="date" id="txtMatchDate" name="txtMatchDate" class="form-control" placeholder="Match Date">*@
+
+                                            @*<input type="datetime-local" id="meeting-time" name="meeting-time" value="2018-06-12T19:30" min="2018-06-07T00:00" max="2018-06-14T00:00">*@
+
+                                            @*<input type="text" id="datetimepicker1" />*@
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-12 text-center">
+                                            <button type="button" id="btnAssignDraw" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('AssignDraw','')">Assign</button>
+                                            <button type="button" id="btnCancelAssignDraw" style="font-size:15px!important;" class="btn btnCancel" onclick="ClearControls('TournamentDraw')">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <table id="tblTD" class="col-lg-12 jsgrid-table m-t-30">
+                                        <thead>
+                                            <tr class="TableHeaderOuter jsgrid-header-row">
+                                                <th class="jsgrid-header-cell" style="display:none">ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Tournament ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Team ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Group ID</th>
+                                                <th class="borderradiustopleft jsgrid-header-cell">Group Name</th>
+                                                <th class="jsgrid-header-cell">Team Name</th>
+                                                <th class="jsgrid-header-cell">Match Time</th>
+                                                <th class="jsgrid-header-cell">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblTD_tbody" class="col-lg-12">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-tournamentmatch" role="tabpanel" aria-labelledby="nav-tournamentmatch-tab">
+                        <div class="col-lg-12 nopadding">
+                            <div class="blog-list-post blog-details-wrap">
+                                <div class="blog-list-post-content">
+                                    <div class="row col-lg-12 col-md-12">
+                                        <div class="col-md-3 col-lg-3">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Group</label>
+                                            <div id="divGroup_Match">
+                                                <select id="cmbGroup_Match" onchange="SelectChange(this)" placeholder="Hello  im from placeholder" class="search-box">
+                                                    <option selected value="0">--Select--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-3">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Team</label><span class="MandatoryField">*</span>
+                                            <div id="divTeam_Match">
+                                                <select id="cmbTeam_Match" onchange="SelectChange(this)" placeholder="Hello  im from placeholder" class="search-box">
+                                                    <option selected value="0">--Select--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-3">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Type</label>
+                                            <div id="divType_Match">
+                                                <select id="cmbType_Match" placeholder="Hello  im from placeholder" class="search-box">
+                                                    <option selected value="0">--Select--</option>
+                                                    <option value="Kill">Kill</option>
+                                                    <option value="Placement">Placement</option>
+                                                    <option value="Wins">Wins</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-3">
+                                            <label for="form1" class="frmlabelHeading nopaddingleft">Points</label>
+                                            <input type="text" class="form-control" id="txtPoints_Match" />
+                                        </div>
+
+                                        <div class="row col-lg-12 col-md-12">
+                                            <div class="col-lg-6 col-md-6 text-right nopadding">
+                                                <button type="button" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('Tournament_Match','')">Assign</button>
+
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 float-left">
+                                                <button type="button" style="font-size:15px!important;" class="btn btnCancel" onclick="ClearControls('Tournament_Match')">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table id="tblTMD" class="col-lg-12 jsgrid-table m-t-30">
+                                        <thead>
+                                            <tr class="TableHeaderOuter jsgrid-header-row">
+                                                <th class="jsgrid-header-cell" style="display:none">ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Tournament ID</th>
+                                                <th class="jsgrid-header-cell" style="display:none">Team ID</th>
+                                                <th class="jsgrid-header-cell">Team Name</th>
+                                                <th class="jsgrid-header-cell">Score Type</th>
+                                                <th class="jsgrid-header-cell">Score</th>
+                                                <th class="jsgrid-header-cell">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblTMD_tbody" class="col-lg-12">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>*@
                 </div>
+
+
             </div>
             <div class="col-lg-4">
                 <aside class="blog-sidebar">
@@ -89,71 +367,140 @@
                             <div class="sidebar-widget-title mb-25">
                                 <h4>Actions <span></span></h4>
                             </div>
-                            <div class="sidebar-about-content">
-                                @if (ViewBag.UserRole == 1)
-                                {
-                                    <p><a class="btn">Edit</a></p>
-                                    <p><a class="btn">Delete</a></p>
-                                }
-                                else
-                                {
-                                    <a class="btn">Enroll</a>
-                                }
 
+                            @if (ViewBag.UserRole == 1)
+                            {
+                                <div class="sidebar-about-content">
+                                    <div class="row col-lg-12 col-md-12 nopadding">
+                                        <div class="col-lg-6 col-md-6"><p><a class="btn edit-new-button">Edit</a></p></div>
+                                        <div class="col-lg-6 col-md-6 nopadding"><p><a class="btn" onclick="UpdateStatus('TournamentDelete','DeleteTournament','');">Delete</a></p></div>
+                                    </div>
+                                </div>
+
+                                <div id="divEndDate" class="sidebar-about-content m-t-10">
+                                    <div class="row col-lg-12 col-md-12 nopadding">
+                                        <div class="col-lg-6 col-md-6"><p>End Date</p></div>
+                                        <div class="col-lg-6 col-md-6 nopadding"><input type="datetime-local" id="txtTournamentEndDate" name="txtTournamentEndDate" class="form-control" placeholder="End Date"></div>
+                                    </div>
+                                </div>
+
+                                <div id="btnEndDate" class="sidebar-about-content m-t-10">
+                                    <div class="row col-lg-12 col-md-12 nopadding">
+                                        <div class="col-lg-6 col-md-6"><p><a class="btn" onclick="UpdateTournamentEndDate()">End</a></p></div>
+                                        <div class="col-lg-6 col-md-6 nopadding"></div>
+                                    </div>
+                                </div>
+
+                                <div id="divEndDateText" class="sidebar-about-content m-t-10">
+                                    <div class="row col-lg-12 col-md-12 nopadding">
+                                        <div class="col-lg-6 col-md-6"><span class="LabelHeader">End Date: </span></div>
+                                        <div class="col-lg-6 col-md-6 nopadding"><label id="lblEndDate" class="LabelInner clryellow"></label></div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="sidebar-about-content">
+                                    <form id="create-enrollment-form">
+                                        <div class="row dis-none">
+                                            <div class="col-lg-6">
+                                                <label>Payment Status</label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input type="text" placeholder="TournamentId" id="TournamentId" name="TournamentId" class="dis-none">
+                                                <select name="Payment Status" id="IsPaymentMade" class="frmcontrol">
+                                                    <option value="0">Select</option>
+                                                    <option value="true">true</option>
+                                                    <option value="false">false</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row dis-none">
+                                            <div class="col-lg-6">
+                                                <label>Payment Type</label>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <select name="PaymentType" id="PaymentType" class="frmcontrol">
+                                                    <option value="0">Select</option>
+                                                    <option value="1">Bank</option>
+                                                    <option value="2">Card</option>
+                                                    <option value="3">PayPal</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        @*<div class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                    <input type="file" placeholder="Payment Proof" id="PaymentProof" name="PaymentProof" class="frmcontrol">
+                                                </div>
+                                            </div>*@
+
+                                    <div class="row modal-form-buttons">
+                                        <button type="submit" id="btnEnroll_User" class="btn enroll-button">Enroll</button>
+                                        <label id="lblEnroll_User"><span class="LabelHeader">Enrollment Status: </span><span class="LabelInner">Enrolled</span></label>
+                                        @*<button type="reset" onclick="HideEnrollmentForm()" class="btn btnCancel">Cancel</button>*@
+                                    </div>
+                                    </form>
+                                    @*<a id="btnEnroll_User" class="btn enroll-button">Enroll</a>*@
+                                    @*<label id="lblEnroll_User"><span class="LabelHeader">Enrollment Status: </span><span class="LabelInner">Enrolled</span></label>*@
+                                </div>
+                            }
+
+
+                        </div>
+                    </div>
+
+                    @*<div class="widget mb-45">
+                            <div class="sidebar-widget-title mb-25">
+                                <h4>Tournament <span>groups</span></h4>
+                            </div>
+                            <div class="rc-post-list">
+                                <a id="add-new-group" class="add-new-button"><i class="fas fa-plus"></i> Add New Group</a>
+                                <ul>
+                                    <li>
+                                        <div class="rc-post-thumb">
+                                            <a href="#"><img src="~/theme/img/blog/rc_post_thumb01.jpg" alt=""></a>
+                                        </div>
+                                        <div class="rc-post-content">
+                                            <h5><a href="#">EVERYONE zombie</a></h5>
+                                            <span>OCTOBER 19, 2020</span>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="widget mb-45">
-                        <div class="sidebar-widget-title mb-25">
-                            <h4>Tournament <span>groups</span></h4>
+                        <div class="widget">
+                            <div class="sidebar-widget-title mb-25">
+                                <h4>Teams <span>Joined</span></h4>
+                            </div>
+                            <div class="sidebar-tag-list">
+                                <ul>
+                                    <li><a href="#">pubg</a></li>
+                                    <li><a href="#">dota 2</a></li>
+                                    <li><a href="#">zombie</a></li>
+                                    <li><a href="#">call of duty</a></li>
+                                    <li><a href="#">development</a></li>
+                                    <li><a href="#">zombieland 2</a></li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="rc-post-list">
-                            <a id="add-new-group" class="add-new-button"><i class="fas fa-plus"></i> Add New Group</a>
-                            <ul>
-                                <li>
-                                    <div class="rc-post-thumb">
-                                        <a href="#"><img src="~/theme/img/blog/rc_post_thumb01.jpg" alt=""></a>
-                                    </div>
-                                    <div class="rc-post-content">
-                                        <h5><a href="#">EVERYONE zombie</a></h5>
-                                        <span>OCTOBER 19, 2020</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
 
-                    <div class="widget">
-                        <div class="sidebar-widget-title mb-25">
-                            <h4>Teams <span>Joined</span></h4>
-                        </div>
-                        <div class="sidebar-tag-list">
-                            <ul>
-                                <li><a href="#">pubg</a></li>
-                                <li><a href="#">dota 2</a></li>
-                                <li><a href="#">zombie</a></li>
-                                <li><a href="#">call of duty</a></li>
-                                <li><a href="#">development</a></li>
-                                <li><a href="#">zombieland 2</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="widget mb-45">
-                        <div class="sidebar-widget-title mb-25">
-                            <h4>More <span>Tournaments</span></h4>
-                        </div>
-                        <div class="sidebar-cat">
-                            <ul>
-                                <li><a href="#">ESPORTS ( 12 )</a></li>
-                                <li><a href="#">play store ( 03 )</a></li>
-                                <li><a href="#">pubg ( 09 )</a></li>
-                                <li><a href="#">zombieland ( 07 )</a></li>
-                                <li><a href="#">shooting ( 02 )</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                        <div class="widget mb-45">
+                            <div class="sidebar-widget-title mb-25">
+                                <h4>More <span>Tournaments</span></h4>
+                            </div>
+                            <div class="sidebar-cat">
+                                <ul>
+                                    <li><a href="#">ESPORTS ( 12 )</a></li>
+                                    <li><a href="#">play store ( 03 )</a></li>
+                                    <li><a href="#">pubg ( 09 )</a></li>
+                                    <li><a href="#">zombieland ( 07 )</a></li>
+                                    <li><a href="#">shooting ( 02 )</a></li>
+                                </ul>
+                            </div>
+                        </div>*@
 
                 </aside>
             </div>
@@ -163,3 +510,32 @@
 <!-- blog-area-end -->
 
 <div class="modal fade theme-modal" id="tournamnt-details-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<div class="modal fade theme-modal" id="enrollment-details-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<div id="TournamentTeamRejectionModal" class="modal fade" role="dialog">
+    <!--<div class="modal-dialog modal-lg">-->
+    <div class="modal-dialog" style="max-width:100%;max-height:100%;">
+        <!-- Modal content-->
+        <div class="modal-content col-xs-8 col-sm-8 col-md-8 col-lg-8 nopadding" style="margin-left: 20%; width: 60%;min-height:270px;margin-top:10%">
+            <div class="modal-header">
+                <h4 class="modal-title" style="color:black">Rejection Reason</h4>
+                <button type="button" class="close ModalClosebtn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label ID="lblID" runat="server" class="dis-none"></label>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margintop15">
+                    <textarea id="txtRejectionComments" style="height: 200px;resize:none;" class="form-control form-rounded" name="Name"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default btnGreyBorder" data-dismiss="modal">Close</button>*@
+                <button type="button" class="btn btnAdd float-right" style="font-size: 15px!important;" id="btnConfirmationYes" onclick="UpdateStatus('TeamPaymentConfirmation','Rejected','')">Reject</button>
+                <button type="button" id="btnConfirmationNo" style="font-size:15px!important;" class="btn btnCancel" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade theme-modal" id="tournament-edit-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>

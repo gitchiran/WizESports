@@ -39,7 +39,7 @@ namespace BusinessLogicLayer.Services
 
         public bool SaveMatch(Match match)
         {
-            if(match != null)
+            if (match != null)
             {
                 return _matchDao.SaveMatch(match);
             }
@@ -47,7 +47,7 @@ namespace BusinessLogicLayer.Services
             {
                 return false;
             }
-            
+
         }
 
         public bool UpdateMatch(Match match)
@@ -67,6 +67,63 @@ namespace BusinessLogicLayer.Services
             if (matchId > 0)
             {
                 return _matchDao.DeleteMatch(matchId);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public IEnumerable<MatchScore> GetTournamentMatchScoreDetails(int tournamentId, int teamId, string ScoreType)
+        {
+            return _matchDao.GetTournamentMatchScoreDetails(tournamentId, teamId, ScoreType);
+        }
+
+        public IEnumerable<Tournament> GetRecentTournamentbySchedule()
+        {
+            return _matchDao.GetRecentTournamentbySchedule();
+        }
+
+        public IEnumerable<TournamentGroup> GetTournamentGroupName(int GroupId)
+        {
+            return _matchDao.GetTournamentGroupName(GroupId);
+        }
+
+        public IEnumerable<MatchScore> GetTournamentMatchScoreDetailsbyGroup(int tournamentId, int teamId)
+        {
+            return _matchDao.GetTournamentMatchScoreDetailsbyGroup(tournamentId, teamId);
+        }
+
+        public bool SaveMatchScore(MatchScore match)
+        {
+            if (match != null)
+            {
+                return _matchDao.SaveMatchScore(match);
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool UpdateMatchScore(MatchScore match)
+        {
+            if (match != null)
+            {
+                return _matchDao.UpdateMatchScore(match);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteMatchScore(int matchId)
+        {
+            if (matchId > 0)
+            {
+                return _matchDao.DeleteMatchScore(matchId);
             }
             else
             {

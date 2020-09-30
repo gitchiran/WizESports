@@ -12,5 +12,6 @@
         public string ContactNic { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
+        public bool TandC { get; set; }
     }
 }

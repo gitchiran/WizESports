@@ -1,4 +1,5 @@
-﻿
+﻿@model Wiz_eSports_Management.Models.Contact
+
 @{
     ViewData["Title"] = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,21 +38,34 @@
                 </div>
                 <div class="contact-info-list mb-40">
                     <ul>
-                        <li><i class="fas fa-map-marker-alt"></i>Walking Park, Los Angeles, Brockland, USA</li>
-                        <li><i class="fas fa-envelope"></i>info@cloux.com</li>
+                        @*<li><i class="fas fa-map-marker-alt"></i>Walking Park, Los Angeles, Brockland, USA</li>*@
+                        @*<li><i class="fas fa-envelope"></i>info@cloux.com</li>*@
+                        <li><i class="fas fa-map-marker-alt"></i><span><b>Address : </b></span>Nr.43, Bl.02, Ap.02, George Enescu, Craiova, Dolj, Romania</li>
+                        <li><i class="fas fa-envelope-open"></i><span><b>Email : </b></span>Shadeez@yahoo.com</li>
+                        <li><i class="fas fa-headphones"></i> <span><b>Phone : </b></span>+76 599 25 00</li>
                     </ul>
                 </div>
                 <div class="contact-form">
-                    <form action="#">
-                        <textarea name="message" id="message" placeholder="Write Message..."></textarea>
+                    <form id="contact-form">
+                        @*<textarea name="message" class="nopadding" style="resize:none" id="message" placeholder="Write Message..."></textarea>*@
+                        @Html.TextAreaFor(m => m.Message, new { @placeholder = "Write Message...", @id = "message", @class = "nopadding", @autocomplete = "off", @style = "resize:none", @validationmessage = "Required Field", @required = "required" })
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="text" placeholder="Your Name">
+                                @*<input type="text" class="nopadding" placeholder="Your Name">*@
+                                @Html.TextBoxFor(m => m.Name, new { @placeholder = "Your Name", @id = "txtName", @class = "nopadding", @autocomplete = "off", @validationmessage = "Required Field", @required = "required" })
                             </div>
                             <div class="col-md-6">
-                                <input type="email" placeholder="Your Mail">
+                                @*<input type="email" class="nopadding" placeholder="Your Mail">*@
+                                @Html.TextBoxFor(m => m.Email, new { @placeholder = "Your Mail", @id = "txtEmail", @class = "nopadding", @autocomplete = "off", @validationmessage = "Required Field", @required = "required" })
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <input type="file" placeholder="" id="ContactFile" name="ContactFile" class="frmcontrol">
+                            </div>
+                        </div>
+
                         <button>SUBMIT MESSAGE</button>
                     </form>
                 </div>
@@ -103,3 +117,54 @@
     </div>
 </div>
 <!-- brand-area-end -->
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            PageActive("liContact");
+            $('#contact-form').submit(function (e) {
+                e.preventDefault();
+                showMask();
+                debugger;
+                let formData = new FormData(this);
+
+                let files = $('#ContactFile')[0].files;
+
+                var FileType = "";
+                if (files.length > 0) {
+                    FileType = $('#ContactFile')[0].files[0].type.split('/')[0];
+
+                    if (FileType != "image") {
+                        hideMask();
+                        DisplayErrorModal('lblMessage', 'myModal', 'Invalid file type. Only images allowed.');
+                    }
+                    else {
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append("contactPageFile", files[i]);
+                        }
+                    }
+                }                
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Contact/ContactForm',
+                    data: formData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        ClearControls('ContactForm');
+                        hideMask();
+                        if (result.status == 200) {
+                            DisplaySuccessModal('lblMessage', 'myModal', 'Your inquiry has placed.');
+                        }
+                    },
+                    error: function () {
+                        //Failed
+                    }
+                });
+
+            });
+        });
+    </script>
+}

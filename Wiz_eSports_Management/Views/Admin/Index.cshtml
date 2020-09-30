@@ -4,5 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+@section Scripts {
+    <script>
+        PageActive("liSettings");
+        BindData('AdminSettings');
+    </script>
+}
 
+<section class="latest-match-area latest-match-bg pt-115 pb-90">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-6">
+                <label for="form1" class="frmlabelHeading nopaddingleft">Youtube Url</label><span class="MandatoryField">*</span>
+                <input type="text" class="form-control" id="YouTubeLink" />
+            </div>
+
+
+            <div class="col-md-4 col-lg-4 m-t-30">
+                <button type="button" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('AdminSettings','')">Update</button>
+            </div>
+            <div class="col-md-2 col-lg-2">
+
+            </div>
+        </div>
+    </div>
+</section>

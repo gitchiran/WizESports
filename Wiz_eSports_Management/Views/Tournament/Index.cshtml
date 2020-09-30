@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<DataAccessLayer.Entities.Tournament>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,20 +8,29 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            PageActive("litournaments");
+            BindAddTournament_Grid();
+            $('.tournament-containerupcoming').click(function () {
+                let tournamentId = $(this).data('tournamentid');
+                window.location.href = "/Tournament/Details?tournamentId=" + tournamentId;
+            });
 
             $('.tournament-container').click(function () {
                 let tournamentId = $(this).data('tournamentid');
                 window.location.href = "/Tournament/Details?tournamentId=" + tournamentId;
             });
-
-            $('.add-new-button').click(function () {
-                $.get('/Tournament/AddTournamentPopup', function (response) {
-
-                    $('#tournamnt-add-modal').html(response);
-                    $('#tournamnt-add-modal').modal('show');
-
-                });
-            });
+            BindData('TournamentTeamPastRegisteredTournament');
+            BindData('TournamentTeamUpcomingRegisteredTournament');
+            BindData('TournamentTeamUpcomingUnregisteredTournament');
+            //////$('.add-new-button').click(function () {
+            //////    //////$.get('/Tournament/AddTournamentPopup', function (response) {
+            //////    //////    $('#tournamnt-add-modal').html(response);
+            //////    //////    $('#tournamnt-add-modal').modal('show');
+            //////    //////});
+            //////    $('#tournament-section').hide();
+            //////    $('#btnAddTournament').hide();
+            //////    $('#tournament-add').show();
+            //////});
         });
     </script>
 }
@@ -39,14 +49,106 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="float-right"><a class="add-new-button"><i class="fas fa-plus"></i> Add New Tournament</a></div>
+
+        @if (ViewBag.UserRole == 1)
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="float-right"><a class="add-new-button" id="btnAddTournament" onclick="ShowHideTournamentForm('Show');"><i class="fas fa-plus"></i> Add New Tournament</a></div>
+                </div>
             </div>
-        </div>
-        <div id="tournament-section">
-            <partial name="_TournamentList" model="Model">
-        </div>
+            <div id="tournament-section">
+                <partial name="_TournamentList" model="Model">
+            </div>
+
+            <div id="tournament-add" class="dis-none">
+
+            </div>
+        }
+
+        @if (ViewBag.UserRole == 2)
+        {
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-registeredteams-tab" data-toggle="tab" href="#nav-registeredteams" role="tab" aria-controls="nav-registeredteams" aria-selected="true">Past Tournaments</a>
+                    <a class="nav-item nav-link" id="nav-tournamentupcoming-tab" data-toggle="tab" href="#nav-tournamentupcoming" role="tab" aria-controls="nav-tournamentupcoming" aria-selected="false">Upcoming Tournaments</a>
+                    <a class="nav-item nav-link" id="nav-tournamentunregistered-tab" data-toggle="tab" href="#nav-tournamentunregistered" role="tab" aria-controls="nav-tournamentunregistered" aria-selected="false">Unregistered Tournaments</a>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-registeredteams" role="tabpanel" aria-labelledby="nav-registeredteams-tab">
+                    <div class="col-lg-12 nopadding">
+                        <div class="blog-list-post blog-details-wrap bkgtrans">
+                            <div class="blog-list-post-content">
+                                <div id="divTeamPastTournaments">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-tournamentupcoming" role="tabpanel" aria-labelledby="nav-tournamentupcoming-tab">
+                    <div class="col-lg-12 nopadding">
+                        <div class="blog-list-post blog-details-wrap bkgtrans">
+                            <div class="blog-list-post-content">
+                                <div id="divTeamUpcomingTournaments">
+                                </div>
+
+                                @*<div id="divTeamTournamentDraw">
+                                    <div class="row nopadding">
+                                        <span>Group 1</span>
+                                    </div>
+                                    <div class="row m-t-10 borderblack">
+                                        <div class="col-lg-6 p-3">
+                                            <span>Date: </span>
+                                            <span>2nd April 2020</span>
+                                        </div>
+                                        <div class="col-lg-6 p-3 text-right">
+                                            <span>Time: </span>
+                                            <span>04:30 PM</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row m-t-10 nopadding">
+                                        <div class="col-lg-4">
+                                            <span>Clan A</span>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <span>Clan B</span>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <span>Clan C</span>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <span>Clan D</span>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <span>Clan E</span>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <span>Clan F</span>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-tournamentunregistered" role="tabpanel" aria-labelledby="nav-tournamentunregistered-tab">
+                    <div class="col-lg-12 nopadding">
+                        <div class="blog-list-post blog-details-wrap bkgtrans">
+                            <div class="blog-list-post-content">
+                                <div id="divTeamUnregisteredTournaments">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
     </div>
 </section>
 <!-- latest-match-area-end -->

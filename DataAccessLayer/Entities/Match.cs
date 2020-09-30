@@ -18,5 +18,6 @@ namespace DataAccessLayer.Entities
 
         public Tournament Tournament { get; set; }
         public ICollection<MatchScore> MatchScore { get; set; }
+        
     }
 }

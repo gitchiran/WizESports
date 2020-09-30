@@ -6,6 +6,10 @@
 
 @section Scripts {
     <script>
+        $(document).ready(function () {
+            PageActive("liusers");
+        });
+        
         $(function () {
             const userRoles = [
                 { Name: "Admin", Id: 1 },
@@ -39,6 +43,7 @@
                 fields: [
                     { name: "username", type: "text", width: 150, title: "Username" },
                     { name: "email", type: "text", width: 300, title: "Email" },
+                    { name: "phoneNumber", type: "text", width: 120, title: "Phone No." },
                     { name: "registeredDate", type: "text", width: 200, title: "Register Date", editing: false },
                     { name: "lastLoginDate", type: "text", width: 200, title: "Last Login", editing: false },
                     {
@@ -58,7 +63,8 @@
                     let valid = true;
                     if(args.item.username === "") {
                         args.cancel = true;
-                        alert("Specify the name of the item!");
+                        ////alert("Specify the name of the item!");
+                        DisplayErrorModal('lblMessage', 'myModal', 'Specify the name of the item!.');
                         valid = false;
                     }
 

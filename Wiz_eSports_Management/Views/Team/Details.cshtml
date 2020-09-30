@@ -7,7 +7,18 @@
 @section Scripts {
     <script>
         $(function () {
+            PageActive("liHome");
             const teamId = $('#teamInfo').data('id');
+
+            //////var playerTag = [];
+            //////playerTag.unshift({ id: "Main", name: "Main" });
+            //////playerTag.unshift({ id: "Reserve", name: "Reserve" });
+
+            var playerTag = [
+                { id: '0', name: "Select" },
+                { id: "Main", name: "Main" },
+                { id: "Reserve", name: "Reserve" }
+            ]
 
             $("#teamPlayerTable").jsGrid({
                 height: "auto",
@@ -23,7 +34,7 @@
                 pageSize: 15,
                 pageButtonCount: 5,
 
-                deleteConfirm: "Do you really want to delete the client?",
+                deleteConfirm: "Do you really want to delete the Player?",
 
                 controller: {
                     loadData: function (filter) {
@@ -36,19 +47,24 @@
                 },
 
                 fields: [
-                    { name: "playerName", type: "text", width: 350, title: "Username" },
-                    { name: "nic", type: "text", width: 100, title: "NIC Number" },
+                    { name: "userName", type: "text", width: 350, title: "User Name" },
+                    { name: "playerName", type: "text", width: 350, title: "Player Name" },
+                    { name: "nic", type: "text", width: 100, title: "Game Id" },
+                    { name: "playerTag", title: "Main/Reserve", type: "select", width: 100, items: playerTag, valueField: "id", textField: "name" },
                     { type: "control" }
                 ],
 
                 onItemInserted: function (args) {
+                    debugger;
                     // cancel insertion of the item with empty 'name' field
                     let valid = true;
-                    if (args.item.username === "") {
-                        args.cancel = true;
-                        alert("Specify the name of the item!");
-                        valid = false;
-                    }
+                    ////////if (args.item.username === "") {
+                    ////////    args.cancel = true;
+                    ////////    alert("Specify the name of the item!");
+                    ////////    valid = false;
+                    ////////}
+
+                    valid = ValidateData(args, 'UserTeam');
 
                     args.item.teamId = teamId;
 
@@ -62,21 +78,29 @@
                             }
                         });
                     }
+                    else {
+                        args.cancel = true;
+                        $("#teamPlayerTable").jsGrid("loadData");
+                    }
                 },
 
                 onItemUpdated: function (args) {
                     // cancel editing of the row of item with field 'ID' = 0
-                    if (args.item.ID === 0) {
-                        args.cancel = true;
-                    } else {
-                        $.ajax({
-                            url: "/Team/UpdatePlayer",
-                            dataType: "json",
-                            data: args.item,
-                            success: function () {
-                                console.log('success');
-                            }
-                        });
+                    let valid = true;
+                    valid = ValidateData(args, 'UserTeam');
+                    if (valid) {
+                        if (args.item.ID === 0) {
+                            args.cancel = true;
+                        } else {
+                            $.ajax({
+                                url: "/Team/UpdatePlayer",
+                                dataType: "json",
+                                data: args.item,
+                                success: function () {
+                                    console.log('success');
+                                }
+                            });
+                        }
                     }
                 },
 
@@ -98,6 +122,10 @@
                 }
             });
 
+        });
+
+        $(document).ready(function () {
+            BindData("TeamClanRankDetails");
         });
     </script>
 }
@@ -135,50 +163,61 @@
         <div class="row">
             <div class="col-12">
                 <div class="game-single-content">
-                    <div class="upcoming-game-head">
-                        <div class="uc-game-head-title">
+                    <div class="upcoming-game-head m-b-0">
+                        <div class="uc-game-head-title m-b-0">
                             @{
                                 var dateString = string.Empty;
-                                if(Model.RegistrationDate.HasValue)
+                                if (Model.RegistrationDate.HasValue)
                                 {
                                     dateString = Model.RegistrationDate.Value.ToString("MMMM dd, yyyy");
                                 }
-                             }
+                            }
                             <span>@dateString</span>
-                            <h4>@Model.TeamDescription</h4>
+                            <div class="col-12 row nopadding">
+                                <div class="col-6">
+                                    <h4>@Model.TeamDescription</h4>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <h4>@Model.ContactPersonNavigation.Cpname - @Model.ContactPersonNavigation.PhoneNumber</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="game-single-title mt-60 mb-30 flex-side-by-side-header">
+
+                    <div class="uc-game-head-title nopadding m-t-10 col-lg-12 col-md-12 m-b-0">
+                        <label class="lblHeading">Clan Ranking- </label><label class="lblHeading"><span id="spnClanRanking" class="clryellow"></span></label>
+                    </div>
+                    <div class="game-single-title mt-40 mb-30 flex-side-by-side-header">
                         <h4>Team <span>Players</span></h4>
                     </div>
                     <div class="game-single-info mb-65">
                         <table id="teamPlayerTable"></table>
                     </div>
-                    <div class="game-single-title mb-30">
-                        <h4>Team <span>Memories</span></h4>
-                    </div>
-                    <div class="game-single-gallery">
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery01.jpg" alt="">
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery02.jpg" alt="">
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery03.jpg" alt="">
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery04.jpg" alt="">
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery05.jpg" alt="">
-                            </div>
-                            <div class="col-lg-4 col-sm-6">
-                                <img src="~/theme/img/images/game_single_gallery06.jpg" alt="">
-                            </div>
+                    @*<div class="game-single-title mb-30">
+                            <h4>Team <span>Memories</span></h4>
                         </div>
-                    </div>
+                        <div class="game-single-gallery">
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery01.jpg" alt="">
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery02.jpg" alt="">
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery03.jpg" alt="">
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery04.jpg" alt="">
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery05.jpg" alt="">
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <img src="~/theme/img/images/game_single_gallery06.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>*@
                     <div class="game-single-shape"><img src="~/theme/img/images/game_section_shape.png" alt=""></div>
                 </div>
             </div>

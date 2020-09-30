@@ -2,6 +2,37 @@
     ViewData["Title"] = "Home Page";
 }
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            PageActive("liHome1");
+            BindData('AdminSettings');
+            BindData('UpcomingTournaments_Index');
+            BindData('LastMatchDetails_Index');
+
+            $('#carousel-example').on('slide.bs.carousel', function (e) {
+                var SliderLength = parseInt(sessionStorage.getItem("SliderLength"));
+                var $e = $(e.relatedTarget);
+                var idx = $e.index();
+                var itemsPerSlide = SliderLength;
+                var totalItems = $('.carousel-item').length;
+
+                if (idx >= totalItems - (itemsPerSlide - 1)) {
+                    var it = itemsPerSlide - (totalItems - idx);
+                    for (var i = 0; i < it; i++) {
+                        // append slides to end
+                        if (e.direction == "left") {
+                            $('.carousel-item').eq(i).appendTo('.carousel-inner');
+                        }
+                        else {
+                            $('.carousel-item').eq(0).appendTo('.carousel-inner');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
 
 <!-- slider-area -->
 <section class="slider-area slider-bg">
@@ -113,6 +144,48 @@
     <!-- latest-games-area -->
     <section class="latest-games-area pt-120">
         <div class="container">
+            @*<div class="row">
+                    <div class="top-content">
+                        <div class="container-fluid">
+                            <div id="carousel-example" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner row w-100 mx-auto" role="listbox">
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4 active">
+                                        <img src="../../theme/img/backgrounds/1.jpg" class="img-fluid mx-auto d-block" alt="img1">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/2.jpg" class="img-fluid mx-auto d-block" alt="img2">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/3.jpg" class="img-fluid mx-auto d-block" alt="img3">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/4.jpg" class="img-fluid mx-auto d-block" alt="img4">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/5.jpg" class="img-fluid mx-auto d-block" alt="img5">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/6.jpg" class="img-fluid mx-auto d-block" alt="img6">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/7.jpg" class="img-fluid mx-auto d-block" alt="img7">
+                                    </div>
+                                    <div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-4">
+                                        <img src="../../theme/img/backgrounds/8.jpg" class="img-fluid mx-auto d-block" alt="img8">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#carousel-example" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carousel-example" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
             <div class="row">
                 <div class="col-lg-6 col-md-8">
                     <div class="section-title mb-50">
@@ -122,69 +195,119 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <div class="latest-games-active owl-carousel">
-                        <div class="latest-games-items mb-30">
-                            <div class="latest-games-thumb">
-                                <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament3.png" alt=""></a>
-                            </div>
-                            <div class="latest-games-content">
-                                <div class="lg-tag">
-                                    <a href="#">war</a>
+                <div id='carousel-example' class='carousel slide col-lg-12 col-md-12' data-ride='carousel'>
+                    <div class='carousel-inner row w-100 mx-auto col-lg-12 nopadding' role='listbox'>
+                        <div class='carousel-item col-12 col-sm-6 col-md-4 col-lg-4 active'>
+                            @*<img src='../../theme/img/backgrounds/1.jpg' class='img-fluid mx-auto d-block' alt='img4'>*@
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="/theme/img/product/tournament3.png" alt=""></a>
                                 </div>
-                                <h4><a href="#">PUBG <span>Weekly</span></a></h4>
-                                <p>entry fee : <span>$10</span></p>
-                                <div class="coming-match-time">
-                                    <div class="coming-time2" data-countdown="2021/3/30"></div>
-                                </div>
+                                <div class="latest-games-content"><h4><a href="#">Testing 1</a></h4><p>entry fee : <span>100</span></p><p>Event Date : <span class="clryellow">2020-12-06</span></p></div>
                             </div>
                         </div>
-                        <div class="latest-games-items mb-30">
-                            <div class="latest-games-thumb">
-                                <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament2.png" alt=""></a>
-                            </div>
-                            <div class="latest-games-content">
-                                <div class="lg-tag">
-                                    <a href="#">zombie</a>
+                        <div class='carousel-item col-12 col-sm-6 col-md-4 col-lg-4'>
+                            @*<img src='../../theme/img/backgrounds/2.jpg' class='img-fluid mx-auto d-block' alt='img2'>*@
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="/theme/img/product/tournament1.png" alt=""></a>
                                 </div>
-                                <h4><a href="#">PUBG <span>Weekly</span></a></h4>
-                                <p>entry fee : <span>$10</span></p>
-                                <div class="coming-match-time">
-                                    <div class="coming-time2" data-countdown="2021/3/30"></div>
-                                </div>
+                                <div class="latest-games-content"><h4><a href="#">Testing 2</a></h4><p>entry fee : <span>200</span></p><p>Event Date : <span class="clryellow">2020-12-16</span></p></div>
                             </div>
                         </div>
-                        <div class="latest-games-items mb-30">
-                            <div class="latest-games-thumb">
-                                <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament1.png" alt=""></a>
-                            </div>
-                            <div class="latest-games-content">
-                                <div class="lg-tag">
-                                    <a href="#">war</a>
+                        <div class='carousel-item col-12 col-sm-6 col-md-4 col-lg-4'>
+                            @*<img src='../../theme/img/backgrounds/3.jpg' class='img-fluid mx-auto d-block' alt='img3'>*@
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="/theme/img/product/tournament2.png" alt=""></a>
                                 </div>
-                                <h4><a href="#">PUBG <span>Monthly</span></a></h4>
-                                <p>entry fee : <span>$15</span></p>
-                                <div class="coming-match-time">
-                                    <div class="coming-time2" data-countdown="2021/3/30"></div>
-                                </div>
+                                <div class="latest-games-content"><h4><a href="#">Testing 3</a></h4><p>entry fee : <span>300</span></p><p>Event Date : <span class="clryellow">2020-08-06</span></p></div>
                             </div>
                         </div>
-                        <div class="latest-games-items mb-30">
-                            <div class="latest-games-thumb">
-                                <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament4.png" alt=""></a>
-                            </div>
-                            <div class="latest-games-content">
-                                <div class="lg-tag">
-                                    <a href="#">promod</a>
+                        @*<div class='carousel-item col-12 col-sm-6 col-md-4 col-lg-4'>
+                                <img src='../../theme/img/backgrounds/4.jpg' class='img-fluid mx-auto d-block' alt='img4'>
+                            </div>*@
+                    </div>
+                    <a class='carousel-control-prev' href='#carousel-example' role='button' data-slide='prev'><span class='fa fa-angle-left navbutton' aria-hidden='true'></span><span class='sr-only'>Previous</span></a><a class='carousel-control-next' href='#carousel-example' role='button' data-slide='next'><span class='fa fa-angle-right navbutton' aria-hidden='true'></span><span class='sr-only'>Next</span></a>
+                </div>
+            </div>
+
+            @*<div class="row">
+                    <div class="col-12">
+                        <div class="latest-games-active owl-carousel">
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament3.png" alt=""></a>
                                 </div>
-                                <h4><a href="#">COD - 4 <span>Monthly</span></a></h4>
-                                <p>entry fee : <span>10</span></p>
-                                <div class="coming-match-time">
-                                    <div class="coming-time2" data-countdown="2021/3/30"></div>
+                                <div class="latest-games-content">
+                                    <div class="lg-tag">
+                                        <a href="#">war</a>
+                                    </div>
+                                    <h4><a href="#">PUBG <span>Weekly</span></a></h4>
+                                    <p>entry fee : <span>$10</span></p>
+                                    <div class="coming-match-time">
+                                        <div class="coming-time2" data-countdown="2021/3/30"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament2.png" alt=""></a>
+                                </div>
+                                <div class="latest-games-content">
+                                    <div class="lg-tag">
+                                        <a href="#">zombie</a>
+                                    </div>
+                                    <h4><a href="#">PUBG <span>Weekly</span></a></h4>
+                                    <p>entry fee : <span>$10</span></p>
+                                    <div class="coming-match-time">
+                                        <div class="coming-time2" data-countdown="2021/3/30"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament1.png" alt=""></a>
+                                </div>
+                                <div class="latest-games-content">
+                                    <div class="lg-tag">
+                                        <a href="#">war</a>
+                                    </div>
+                                    <h4><a href="#">PUBG <span>Monthly</span></a></h4>
+                                    <p>entry fee : <span>$15</span></p>
+                                    <div class="coming-match-time">
+                                        <div class="coming-time2" data-countdown="2021/3/30"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="latest-games-items mb-30">
+                                <div class="latest-games-thumb">
+                                    <a data-toggle="modal" data-target="#exampleModal"><img src="~/theme/img/product/tournament4.png" alt=""></a>
+                                </div>
+                                <div class="latest-games-content">
+                                    <div class="lg-tag">
+                                        <a href="#">promod</a>
+                                    </div>
+                                    <h4><a href="#">COD - 4 <span>Monthly</span></a></h4>
+                                    <p>entry fee : <span>10</span></p>
+                                    <div class="coming-match-time">
+                                        <div class="coming-time2" data-countdown="2021/3/30"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>*@
+
+            <div class="row m-t-30">
+                <div class="section-title col-12 col-md-12">
+                    <h2>Tournament <span>Rankings</span></h2>
+                </div>
+                <div class="col-12 col-md-12">
+                    <span style="font-size: 22px;vertical-align: middle;color:#e4a101;font-family: 'Poppins', sans-serif;" id="spnRankings"></span>
+                </div>
+                <div class="col-12 col-md-12 tournament-schedule-wrap_15 tournament-area text-center" id="divMatchDetails_Index" style=" overflow: auto; max-height: 530px;">
+
                 </div>
             </div>
         </div>
@@ -197,7 +320,7 @@
                 <div class="col-lg-6 order-0 order-lg-2">
                     <div class="about-img">
                         <img src="~/theme/img/images/Highlights_img.jpg" alt="">
-                        <a href="https://www.youtube.com/watch?v=_LTiEXMc5J0" class="popup-video"><img src="~/theme/img/icon/play_btn.png" alt=""></a>
+                        <a id="YouTubeLink" href="https://www.youtube.com/watch?v=_LTiEXMc5J0" class="popup-video"><img src="~/theme/img/icon/play_btn.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -206,13 +329,28 @@
                         <h2>Tournament<span> Highlights </span></h2>
                     </div>
                     <div class="about-content">
-                        <p>Find technology or people for digital projects in public sector and Find an individual specialist develo researcher.</p>
+                        @*<p>Find technology or people for digital projects in public sector and Find an individual specialist develo researcher.</p>
+                            <p>
+                                Consectur adipiscing elit, sed do eiusmod tempor incididunt labore dolore mana aliqua. Unimd minim venam quis nostrud
+                                exercitation ullamco laboris nisi ut aliquip commodo cpsam.
+                            </p>*@
                         <p>
-                            Consectur adipiscing elit, sed do eiusmod tempor incididunt labore dolore mana aliqua. Unimd minim venam quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip commodo cpsam.
+                            Battle with Trecco
+                        </p>
+                        <p>
+                            Competitive gaming, also known as Trecco, in one of the fastest-growing segments of the video game industry.
+                        </p>
+                        <p>
+                            It is a sports competition that uses video games. Trecco often takes the form of organized, multiplayer video game games, especially among professional players, individual or in groups.
+                        </p>
+                        <p>
+                            *Join with us to achieve victory, and to improve your multi-talented gaming skills.
+                        </p>
+                        <p>
+                            WE ARE THE NUMBER ONE WHO EXPLORE YOUR TALENTS.
                         </p>
                         <div class="about-btn">
-                            <a href="#" class="btn">READ MORE</a>
+                            <a href="@Url.Action("Register","Home")" class="btn">Join Now</a>
                         </div>
                     </div>
                 </div>
@@ -224,378 +362,488 @@
 </div>
 <!-- area-bg-one-end -->
 <!-- area-bg-two -->
-<div class="area-bg-two">
+@*<div class="area-bg-two">
 
-    <!-- shop-area -->
+       <!-- shop-area -->
     <section class="shop-area pt-120 pb-90">
+               <div class="container">
+                   <div class="row justify-content-center">
+                       <div class="col-xl-7 col-lg-8">
+                           <div class="section-title title-style-two text-center mb-30">
+                               <span>gaming accessories</span>
+                               <h2>Gadget <span>Corner</span></h2>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="row product-active">
+                       <div class="col-xl-3">
+                           <div class="shop-item">
+                               <div class="product-thumb">
+                                   <a href="#"><img src="~/theme/img/product/Products1.png" alt=""></a>
+                               </div>
+                               <div class="product-content">
+                                   <div class="product-tag"><a href="#">t-shirt</a></div>
+                                   <h4><a href="#">PUBG Black T-shirt - Design1</a></h4>
+                                   <div class="product-meta">
+                                       <div class="product-price">
+                                           <h5>$25.00</h5>
+                                       </div>
+                                       <div class="product-cart-action">
+                                           <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-xl-3">
+                           <div class="shop-item">
+                               <div class="product-thumb">
+                                   <a href="#"><img src="~/theme/img/product/Products2.png" alt=""></a>
+                               </div>
+                               <div class="product-content">
+                                   <div class="product-tag"><a href="#">t-shirt</a></div>
+                                   <h4><a href="#">PUBG Black T-shirt - Design2</a></h4>
+                                   <div class="product-meta">
+                                       <div class="product-price">
+                                           <h5>$25.00</h5>
+                                       </div>
+                                       <div class="product-cart-action">
+                                           <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-xl-3">
+                           <div class="shop-item">
+                               <div class="product-thumb">
+                                   <a href="#"><img src="~/theme/img/product/Products3.png" alt=""></a>
+                               </div>
+                               <div class="product-content">
+                                   <div class="product-tag"><a href="#">Profile</a></div>
+                                   <h4><a href="#">PUBG L37 Profile</a></h4>
+                                   <div class="product-meta">
+                                       <div class="product-price">
+                                           <h5>$85.00</h5>
+                                       </div>
+                                       <div class="product-cart-action">
+                                           <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-xl-3">
+                           <div class="shop-item">
+                               <div class="product-thumb">
+                                   <a href="#"><img src="~/theme/img/product/Products4.png" alt=""></a>
+                               </div>
+                               <div class="product-content">
+                                   <div class="product-tag"><a href="#">Profile</a></div>
+                                   <h4><a href="#">PUBG L50 Profile</a></h4>
+                                   <div class="product-meta">
+                                       <div class="product-price">
+                                           <h5>$100.00</h5>
+                                       </div>
+                                       <div class="product-cart-action">
+                                           <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-xl-3">
+                           <div class="shop-item">
+                               <div class="product-thumb">
+                                   <a href="#"><img src="~/theme/img/product/Products5.png" alt=""></a>
+                               </div>
+                               <div class="product-content">
+                                   <div class="product-tag"><a href="#">Profile</a></div>
+                                   <h4><a href="#">PUBG L88 Profile</a></h4>
+                                   <div class="product-meta">
+                                       <div class="product-price">
+                                           <h5>$150.00</h5>
+                                       </div>
+                                       <div class="product-cart-action">
+                                           <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </section>*@
+
+@*<section class="shop-area pt-120 pb-90">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-7 col-lg-8">
+                        <div class="section-title title-style-two text-center mb-30">
+                            <span></span>
+                            <h2><span></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row product-active">
+                    <div class="col-xl-3">
+                        <div class="shop-item">
+                            <div class="product-thumb">
+                                <a href="#"><img src="~/theme/img/product/Products1.png" alt=""></a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-tag"><a href="#"></a></div>
+                                <h4><a href="#"></a></h4>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <h5></h5>
+                                    </div>
+                                    <div class="product-cart-action">
+                                        <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="shop-item">
+                            <div class="product-thumb">
+                                <a href="#"><img src="~/theme/img/product/Products2.png" alt=""></a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-tag"><a href="#"></a></div>
+                                <h4><a href="#"></a></h4>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <h5></h5>
+                                    </div>
+                                    <div class="product-cart-action">
+                                        <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="shop-item">
+                            <div class="product-thumb">
+                                <a href="#"><img src="~/theme/img/product/Products3.png" alt=""></a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-tag"><a href="#"></a></div>
+                                <h4><a href="#"></a></h4>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <h5></h5>
+                                    </div>
+                                    <div class="product-cart-action">
+                                        <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="shop-item">
+                            <div class="product-thumb">
+                                <a href="#"><img src="~/theme/img/product/Products4.png" alt=""></a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-tag"><a href="#"></a></div>
+                                <h4><a href="#"></a></h4>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <h5></h5>
+                                    </div>
+                                    <div class="product-cart-action">
+                                        <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="shop-item">
+                            <div class="product-thumb">
+                                <a href="#"><img src="~/theme/img/product/Products5.png" alt=""></a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-tag"><a href="#"></a></div>
+                                <h4><a href="#"></a></h4>
+                                <div class="product-meta">
+                                    <div class="product-price">
+                                        <h5></h5>
+                                    </div>
+                                    <div class="product-cart-action">
+                                        <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- shop-area-end -->
+    </div>*@
+<!-- area-bg-two-end -->
+<!-- game-manage-area -->
+@*<section class="game-manage-area game-mange-bg pt-120 pb-120">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-7 col-lg-8">
-                    <div class="section-title title-style-two text-center mb-30">
-                        <span>gaming accessories</span>
-                        <h2>Gadget <span>Corner</span></h2>
+                    <div class="section-title title-style-two text-center mb-60">
+                        <span>COME THE END OF THE WORLD</span>
+                        <h2>WIZ Notice <span>Board</span></h2>
                     </div>
                 </div>
             </div>
-            <div class="row product-active">
-                <div class="col-xl-3">
-                    <div class="shop-item">
-                        <div class="product-thumb">
-                            <a href="#"><img src="~/theme/img/product/Products1.png" alt=""></a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-tag"><a href="#">t-shirt</a></div>
-                            <h4><a href="#">PUBG Black T-shirt - Design1</a></h4>
-                            <div class="product-meta">
-                                <div class="product-price">
-                                    <h5>$25.00</h5>
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo01.png" alt=""></a>
                                 </div>
-                                <div class="product-cart-action">
-                                    <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                <div class="match-team-name">
+                                    <a href="#">Bluster 8</a>
                                 </div>
                             </div>
+                            <div class="coming-match-status">
+                                <img src="~/theme/img/team/match_vs.png" alt="">
+                            </div>
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo02.png" alt=""></a>
+                                </div>
+                                <div class="match-team-name">
+                                    <a href="#">kill bill 7</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coming-match-info">
+                            <h5>Forza <span>Horizon ii</span></h5>
+                            <div class="match-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="match-info-action">
+                                <a href="#" class="btn">view details</a>
+                                <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
+                            </div>
+                        </div>
+                        <div class="coming-match-time">
+                            <div class="coming-time" data-countdown="2021/3/30"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="shop-item">
-                        <div class="product-thumb">
-                            <a href="#"><img src="~/theme/img/product/Products2.png" alt=""></a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-tag"><a href="#">t-shirt</a></div>
-                            <h4><a href="#">PUBG Black T-shirt - Design2</a></h4>
-                            <div class="product-meta">
-                                <div class="product-price">
-                                    <h5>$25.00</h5>
+                <div class="col-lg-4 col-md-6">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo03.png" alt=""></a>
                                 </div>
-                                <div class="product-cart-action">
-                                    <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                <div class="match-team-name">
+                                    <a href="#">Bluster 8</a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3">
-                    <div class="shop-item">
-                        <div class="product-thumb">
-                            <a href="#"><img src="~/theme/img/product/Products3.png" alt=""></a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-tag"><a href="#">Profile</a></div>
-                            <h4><a href="#">PUBG L37 Profile</a></h4>
-                            <div class="product-meta">
-                                <div class="product-price">
-                                    <h5>$85.00</h5>
+                            <div class="coming-match-status">
+                                <img src="~/theme/img/team/match_vs.png" alt="">
+                            </div>
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo04.png" alt=""></a>
                                 </div>
-                                <div class="product-cart-action">
-                                    <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                <div class="match-team-name">
+                                    <a href="#">The Champ</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-xl-3">
-                    <div class="shop-item">
-                        <div class="product-thumb">
-                            <a href="#"><img src="~/theme/img/product/Products4.png" alt=""></a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-tag"><a href="#">Profile</a></div>
-                            <h4><a href="#">PUBG L50 Profile</a></h4>
-                            <div class="product-meta">
-                                <div class="product-price">
-                                    <h5>$100.00</h5>
-                                </div>
-                                <div class="product-cart-action">
-                                    <a href="#"><i class="fas fa-shopping-basket"></i></a>
-                                </div>
+                        <div class="coming-match-info">
+                            <h5>Thanos <span>Sky ii</span></h5>
+                            <div class="match-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="match-info-action">
+                                <a href="#" class="btn">view details</a>
+                                <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
                             </div>
                         </div>
+                        <div class="coming-match-time">
+                            <div class="coming-time" data-countdown="2021/3/30"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xl-3">
-                    <div class="shop-item">
-                        <div class="product-thumb">
-                            <a href="#"><img src="~/theme/img/product/Products5.png" alt=""></a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-tag"><a href="#">Profile</a></div>
-                            <h4><a href="#">PUBG L88 Profile</a></h4>
-                            <div class="product-meta">
-                                <div class="product-price">
-                                    <h5>$150.00</h5>
+                <div class="col-lg-4 col-md-6">
+                    <div class="coming-match-item mb-30">
+                        <div class="coming-match-team">
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo05.png" alt=""></a>
                                 </div>
-                                <div class="product-cart-action">
-                                    <a href="#"><i class="fas fa-shopping-basket"></i></a>
+                                <div class="match-team-name">
+                                    <a href="#">Warrior</a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- shop-area-end -->
-
-</div>
-<!-- area-bg-two-end -->
-<!-- game-manage-area -->
-<section class="game-manage-area game-mange-bg pt-120 pb-120">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-8">
-                <div class="section-title title-style-two text-center mb-60">
-                    <span>COME THE END OF THE WORLD</span>
-                    <h2>WIZ Notice <span>Board</span></h2>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6">
-                <div class="coming-match-item mb-30">
-                    <div class="coming-match-team">
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo01.png" alt=""></a>
+                            <div class="coming-match-status">
+                                <img src="~/theme/img/team/match_vs.png" alt="">
                             </div>
-                            <div class="match-team-name">
-                                <a href="#">Bluster 8</a>
+                            <div class="match-team-info">
+                                <div class="match-team-logo">
+                                    <a href="#"><img src="~/theme/img/team/team_logo06.png" alt=""></a>
+                                </div>
+                                <div class="match-team-name">
+                                    <a href="#">kill bill 7</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="coming-match-status">
-                            <img src="~/theme/img/team/match_vs.png" alt="">
-                        </div>
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo02.png" alt=""></a>
+                        <div class="coming-match-info">
+                            <h5>Hunter <span>Killer ii</span></h5>
+                            <div class="match-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
                             </div>
-                            <div class="match-team-name">
-                                <a href="#">kill bill 7</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="coming-match-info">
-                        <h5>Forza <span>Horizon ii</span></h5>
-                        <div class="match-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="match-info-action">
-                            <a href="#" class="btn">view details</a>
-                            <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
-                        </div>
-                    </div>
-                    <div class="coming-match-time">
-                        <div class="coming-time" data-countdown="2021/3/30"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="coming-match-item mb-30">
-                    <div class="coming-match-team">
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo03.png" alt=""></a>
-                            </div>
-                            <div class="match-team-name">
-                                <a href="#">Bluster 8</a>
+                            <div class="match-info-action">
+                                <a href="#" class="btn">view details</a>
+                                <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
                             </div>
                         </div>
-                        <div class="coming-match-status">
-                            <img src="~/theme/img/team/match_vs.png" alt="">
-                        </div>
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo04.png" alt=""></a>
-                            </div>
-                            <div class="match-team-name">
-                                <a href="#">The Champ</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="coming-match-info">
-                        <h5>Thanos <span>Sky ii</span></h5>
-                        <div class="match-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="match-info-action">
-                            <a href="#" class="btn">view details</a>
-                            <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
-                        </div>
-                    </div>
-                    <div class="coming-match-time">
-                        <div class="coming-time" data-countdown="2021/3/30"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="coming-match-item mb-30">
-                    <div class="coming-match-team">
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo05.png" alt=""></a>
-                            </div>
-                            <div class="match-team-name">
-                                <a href="#">Warrior</a>
-                            </div>
-                        </div>
-                        <div class="coming-match-status">
-                            <img src="~/theme/img/team/match_vs.png" alt="">
-                        </div>
-                        <div class="match-team-info">
-                            <div class="match-team-logo">
-                                <a href="#"><img src="~/theme/img/team/team_logo06.png" alt=""></a>
-                            </div>
-                            <div class="match-team-name">
-                                <a href="#">kill bill 7</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="coming-match-info">
-                        <h5>Hunter <span>Killer ii</span></h5>
-                        <div class="match-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="match-info-action">
-                            <a href="#" class="btn">view details</a>
-                            <a href="#" class="btn transparent-btn"><i class="fas fa-comments"></i> Comments</a>
-                        </div>
-                    </div>
-                    <div class="coming-match-time">
-                        <div class="coming-time" data-countdown="2021/3/30"></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <div class="tournament-area mt-30">
-            <div class="row">
-                <div class="col-12">
-                    <div class="tournament-top-wrap">
-                        <div class="section-title tournament-title">
-                            <h2>Joining <span>Tournament</span></h2>
-                        </div>
-                        <div class="tournament-menu">
-                            <button class="active" data-filter="*">All</button>
-                            <button class="" data-filter=".cat-one">GAMER</button>
-                            <button class="" data-filter=".cat-two">PROFESSIONAL</button>
-                            <button class="" data-filter=".cat-three">ADVENTURE</button>
+                        <div class="coming-match-time">
+                            <div class="coming-time" data-countdown="2021/3/30"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="tournament-schedule-wrap">
-                        <div class="tournament-active">
-                            <div class="single-tournament mb-15 grid-item cat-three cat-two">
-                                <div class="row no-gutters">
-                                    <div class="col-lg-4">
-                                        <div class="tournament-schedule-item">
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo01.png" alt=""></a>
+            <div class="tournament-area mt-30">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tournament-top-wrap">
+                            <div class="section-title tournament-title">
+                                <h2>Joining <span>Tournament</span></h2>
+                            </div>
+                            <div class="tournament-menu">
+                                <button class="active" data-filter="*">All</button>
+                                <button class="" data-filter=".cat-one">GAMER</button>
+                                <button class="" data-filter=".cat-two">PROFESSIONAL</button>
+                                <button class="" data-filter=".cat-three">ADVENTURE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tournament-schedule-wrap">
+                            <div class="tournament-active">
+                                <div class="single-tournament mb-15 grid-item cat-three cat-two">
+                                    <div class="row no-gutters">
+                                        <div class="col-lg-4">
+                                            <div class="tournament-schedule-item">
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo01.png" alt=""></a>
+                                                    </div>
+                                                </div>
+                                                <div class="coming-match-status">
+                                                    <img src="~/theme/img/team/match_vs.png" alt="">
+                                                </div>
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo02.png" alt=""></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="coming-match-status">
-                                                <img src="~/theme/img/team/match_vs.png" alt="">
-                                            </div>
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo02.png" alt=""></a>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="tournament-schedule-content">
+                                                <h3><a href="#">Forza <span>Horizon ii</span></a></h3>
+                                                <p>
+                                                    Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
+                                                    available, but the majority have suffered.
+                                                </p>
+                                                <div class="tournament-schedule-meta">
+                                                    <h5>price : <span>$125,00</span></h5>
+                                                    <a href="#">Joining</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <div class="tournament-schedule-content">
-                                            <h3><a href="#">Forza <span>Horizon ii</span></a></h3>
-                                            <p>
-                                                Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
-                                                available, but the majority have suffered.
-                                            </p>
-                                            <div class="tournament-schedule-meta">
-                                                <h5>price : <span>$125,00</span></h5>
-                                                <a href="#">Joining</a>
+                                </div>
+                                <div class="single-tournament mb-15 grid-item cat-one cat-three">
+                                    <div class="row no-gutters">
+                                        <div class="col-lg-4">
+                                            <div class="tournament-schedule-item">
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo03.png" alt=""></a>
+                                                    </div>
+                                                </div>
+                                                <div class="coming-match-status">
+                                                    <img src="~/theme/img/team/match_vs.png" alt="">
+                                                </div>
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo04.png" alt=""></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="tournament-schedule-content">
+                                                <h3><a href="#">Thanos <span>Sky ii</span></a></h3>
+                                                <p>
+                                                    Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
+                                                    available, but the majority have suffered.
+                                                </p>
+                                                <div class="tournament-schedule-meta">
+                                                    <h5>price : <span>$125,00</span></h5>
+                                                    <a href="#">Joining</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="single-tournament mb-15 grid-item cat-one cat-three">
-                                <div class="row no-gutters">
-                                    <div class="col-lg-4">
-                                        <div class="tournament-schedule-item">
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo03.png" alt=""></a>
+                                <div class="single-tournament mb-15 grid-item cat-two cat-one">
+                                    <div class="row no-gutters">
+                                        <div class="col-lg-4">
+                                            <div class="tournament-schedule-item">
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo05.png" alt=""></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="coming-match-status">
-                                                <img src="~/theme/img/team/match_vs.png" alt="">
-                                            </div>
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo04.png" alt=""></a>
+                                                <div class="coming-match-status">
+                                                    <img src="~/theme/img/team/match_vs.png" alt="">
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="tournament-schedule-content">
-                                            <h3><a href="#">Thanos <span>Sky ii</span></a></h3>
-                                            <p>
-                                                Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
-                                                available, but the majority have suffered.
-                                            </p>
-                                            <div class="tournament-schedule-meta">
-                                                <h5>price : <span>$125,00</span></h5>
-                                                <a href="#">Joining</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="single-tournament mb-15 grid-item cat-two cat-one">
-                                <div class="row no-gutters">
-                                    <div class="col-lg-4">
-                                        <div class="tournament-schedule-item">
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo05.png" alt=""></a>
-                                                </div>
-                                            </div>
-                                            <div class="coming-match-status">
-                                                <img src="~/theme/img/team/match_vs.png" alt="">
-                                            </div>
-                                            <div class="match-team-info">
-                                                <div class="match-team-logo">
-                                                    <a href="#"><img src="~/theme/img/team/team_logo06.png" alt=""></a>
+                                                <div class="match-team-info">
+                                                    <div class="match-team-logo">
+                                                        <a href="#"><img src="~/theme/img/team/team_logo06.png" alt=""></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="tournament-schedule-content">
-                                            <h3><a href="#">Call Of <span>Duty ii</span></a></h3>
-                                            <p>
-                                                Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
-                                                available, but the majority have suffered.
-                                            </p>
-                                            <div class="tournament-schedule-meta">
-                                                <h5>price : <span>$125,00</span></h5>
-                                                <a href="#">Joining</a>
+                                        <div class="col-lg-8">
+                                            <div class="tournament-schedule-content">
+                                                <h3><a href="#">Call Of <span>Duty ii</span></a></h3>
+                                                <p>
+                                                    Find tecology people for digital projects in public sector.There are many variations of passages of Lorem Ipsu
+                                                    available, but the majority have suffered.
+                                                </p>
+                                                <div class="tournament-schedule-meta">
+                                                    <h5>price : <span>$125,00</span></h5>
+                                                    <a href="#">Joining</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -606,6 +854,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>*@
 <!-- game-manage-area-end -->

@@ -44,7 +44,7 @@ namespace DataAccessLayer.DAO
         {
             try
             {
-                return db.Team.FirstOrDefault(t => t.Id == teamId);
+                return db.Team.Include(t => t.ContactPersonNavigation).FirstOrDefault(t => t.Id == teamId);
             }
             catch (Exception)
             {
@@ -56,7 +56,8 @@ namespace DataAccessLayer.DAO
         {
             try
             {
-                return db.Team.FirstOrDefault(t => t.UserId == userId);
+                //////return db.Team.FirstOrDefault(t => t.UserId == userId);
+                return db.Team.Include(x=>x.ContactPersonNavigation).FirstOrDefault(t => t.UserId == userId);
             }
             catch (Exception)
             {
@@ -110,6 +111,28 @@ namespace DataAccessLayer.DAO
                 }
 
                 return isDeleted > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool UpdatePaymentVerificationStatus(int Id,char IsPaymentVerifiedByAdmin,string AdminComments)
+        {
+            try
+            {
+                int isUpdated = 0;
+                var team = db.TournamentTeam.FirstOrDefault(t => t.Id == Id);
+                if (team != null)
+                {
+                    team.IsPaymentVerifiedByAdmin = IsPaymentVerifiedByAdmin;
+                    team.AdminComments = AdminComments;
+                    db.TournamentTeam.Update(team);
+                    isUpdated = db.SaveChanges();
+                }
+
+                return isUpdated > 0;
             }
             catch (Exception)
             {

@@ -28,7 +28,27 @@ namespace DataAccessLayer.DAO
 
                 return isAuthenticated;
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool IsNotVerified(string userName, string password)
+        {
+            try
+            {
+                bool IsNotVerified = false;
+                var user = db.User.FirstOrDefault(u => u.Username.Equals(userName) && u.Password.Equals(password) && u.IsActive == true && u.IsVerified == false);
+
+                if (user != null)
+                {
+                    IsNotVerified = true;
+                }
+
+                return IsNotVerified;
+            }
+            catch (Exception ex)
             {
                 return false;
             }
@@ -43,7 +63,7 @@ namespace DataAccessLayer.DAO
                 i = db.SaveChanges();
                 return i > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

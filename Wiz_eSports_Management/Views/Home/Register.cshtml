@@ -9,8 +9,16 @@
         $(document).ready(function () {
 
             $('#user-registration-form').submit(function (e) {
-
+                debugger;
+                ShowLoader();
                 e.preventDefault();
+
+                if ($('#chkTandC').prop('checked')) {
+                    $('#TandC').val(true);
+                }
+                else {
+                    $('#TandC').val(false);
+                }
                 let formData = new FormData(this);
 
                 let files = $('#teamLogo')[0].files;
@@ -28,21 +36,32 @@
                     contentType: false,
                     processData: false,
                     success: function (result) {
-
+                        debugger;
                         if (typeof result == 'string') {
                             result = JSON.parse(result);
                         }
 
                         if (result.status == 200) {
                             //Success
+                            ////alert("Registered Successfully!!");
+                            DisplaySuccessModal('lblRegMessage', 'myRegModal', 'Registered successfully. Kindly verify the account from the email sent!!');
+                            ClearControls('UserRegistration');
+                            ////window.location.href = "/Home/Index";
+                        }
+                        else if (result.status == 201) {
+                            DisplayErrorModal('lblMessage', 'myModal', 'UserName/Email already exists!!');
+                        }
+                        else if (result.status == 202) {
+                            DisplayErrorModal('lblMessage', 'myModal', 'Plese select the Terms and Conditions checkbox!!');
                         }
                         else {
                             //Failed
                         }
-                
+                        setTimeout(function () { HideLoader(); }, 1000);
                     },
                     error: function () {
                         //Failed
+                        setTimeout(function () { HideLoader(); }, 1000);
                     }
                 });
             });
@@ -115,15 +134,52 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <button class="btn" type="reset">Clear</button>
+                                <input type="checkbox" id="chkTandC" name="chkTandC" value="" class="widthauto">
+                                <input type="text" placeholder="" name="TandC" id="TandC" class="dis-none">
+                                <label for="chkTandC"> I accept the <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('TermsOfUse')">Terms &amp; Conditions</a> and I acknowledge <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('PrivacyPolicy')">Privacy Policy</a></label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" id="EandC" name="EandC" value="" class="widthauto">
+                                <label for="EandC"> I agree to receive emails &amp; phone communications</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn" type="reset" onclick="ClearControls('UserRegistration')">Clear</button>
                             </div>
                             <div class="col-md-6">
                                 <button class="btn" type="submit">Sign Up</button>
                             </div>
                         </div>
+
+                        <div class="row pull-right">
+                            <label class="m-t-15">Already a member? </label>
+                            <button class="btnSignIn m-l-5" onclick="PageRedirectClick('SignInPage')">Sign In</button>
+                        </div>
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="myRegModal" class="modal fade" role="dialog">
+        <!--<div class="modal-dialog modal-lg">-->
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close ModalClosebtn" onclick="PageRedirectClick('IndexPage',0)" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">MESSAGE</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:Label ID="lblRegMessage" runat="server" CssClass="Success"></asp:Label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btnGreyBorder" onclick="PageRedirectClick('IndexPage',0)" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

@@ -7,10 +7,11 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            PageActive("liteams");
             $('.team-container').click(function () {
                 let teamId = $(this).data('teamid');
                 window.location.href = "/Team/Details?teamId=" + teamId;
-            });
+            });            
         });
     </script>
 }

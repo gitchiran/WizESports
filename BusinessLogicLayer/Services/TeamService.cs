@@ -71,5 +71,17 @@ namespace BusinessLogicLayer.Services
                 return false;
             }
         }
+
+        public bool UpdatePaymentVerificationStatus(int Id, char IsPaymentVerifiedByAdmin, string AdminComments)
+        {
+            if (Id > 0)
+            {
+                return _teamDao.UpdatePaymentVerificationStatus(Id, IsPaymentVerifiedByAdmin, AdminComments);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

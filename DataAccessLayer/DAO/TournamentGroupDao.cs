@@ -32,7 +32,7 @@ namespace DataAccessLayer.DAO
         {
             try
             {
-                return db.TournamentGroup.Where(t => t.TournamentId == tournamentId).Include(t => t.Tournament).ToList();
+                return db.TournamentGroup.Where(t => t.TournamentId == tournamentId && t.IsActive==true).Include(t => t.Tournament).ToList();
             }
             catch (Exception)
             {

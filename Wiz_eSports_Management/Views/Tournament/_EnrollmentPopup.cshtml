@@ -1,0 +1,103 @@
+﻿@model DataAccessLayer.Entities.TournamentTeam
+
+<script>
+    $(document).ready(function () {
+        var tournamentId = getUrlVars()["tournamentId"];
+        $('#TournamentId').val(tournamentId);
+        $('.datepicker').datepicker({
+            startDate: '+0d'
+        });
+
+        $('#create-enrollment-form').submit(function (e) {
+            debugger;
+            e.preventDefault();
+
+            let valid = true;
+
+            valid = ValidateData('', 'UserEnrollment');
+
+
+            if (valid == true) {
+                showMask();
+
+                let formData = new FormData(this);
+
+                ////let files = $('#PaymentProof')[0].files;
+
+                ////for (var i = 0; i < files.length; i++) {
+                ////    formData.append("paymentImageFile", files[i]);
+                ////}
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Tournament/Enroll',
+                    data: formData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        ////ClearControls('AdminTournament');
+                        ////alert("Enrolled Successfully");
+                        DisplaySuccessModal('lblMessage', 'myModal', 'Enrolled Successfully.');
+                        $('#enrollment-details-modal').modal('hide');
+                        hideMask();
+                        location.reload();
+                        //////$.get('/Tournament/GetTournaments', function (response) {
+                        //////    $('#tournament-section').html(response);
+                        //////    hideMask();
+                        //////});
+                    },
+                    error: function () {
+                        //Failed
+                    }
+                });
+            }
+
+        });
+    });
+</script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form id="create-enrollment-form">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label>Payment Status</label>
+                </div>
+                <div class="col-lg-6">
+                    <input type="text" placeholder="TournamentId" id="TournamentId" name="TournamentId" class="dis-none">
+                    <select name="Payment Status" id="IsPaymentMade" class="frmcontrol">
+                        <option value="0">Select</option>
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <label>Payment Type</label>
+                </div>
+                <div class="col-lg-6">
+                    <select name="PaymentType" id="PaymentType" class="frmcontrol">
+                        <option value="0">Select</option>
+                        <option value="1">Bank</option>
+                        <option value="2">Card</option>
+                        <option value="3">PayPal</option>
+                    </select>
+                </div>
+            </div>
+
+            @*<div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <input type="file" placeholder="Payment Proof" id="PaymentProof" name="PaymentProof" class="frmcontrol">
+                </div>
+            </div>*@
+
+            <div class="row modal-form-buttons">
+                <button type="submit" id="enrollment-form-submit-btn" class="btn btnAdd">Enroll</button>
+                <button type="reset" onclick="HideEnrollmentForm()" class="btn btnCancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

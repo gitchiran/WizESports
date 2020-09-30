@@ -1,4 +1,7 @@
-﻿namespace DataAccessLayer.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace DataAccessLayer.Entities
 {
     public partial class TeamTournamentGroup
     {
@@ -8,5 +11,6 @@
 
         public TournamentGroup Group { get; set; }
         public Team Team { get; set; }
+        ////public ICollection<TournamentDraw> TournamentDraw { get; set; }
     }
 }

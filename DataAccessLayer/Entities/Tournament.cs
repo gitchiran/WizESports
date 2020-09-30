@@ -19,6 +19,7 @@ namespace DataAccessLayer.Entities
         public DateTime? SceduledDate { get; set; }
         public string ContactPerson { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int? CreatedBy { get; set; }
         public bool? IsActive { get; set; }
         public int? EntryFee { get; set; }
@@ -27,5 +28,19 @@ namespace DataAccessLayer.Entities
         public ICollection<TournamentDraw> TournamentDraw { get; set; }
         public ICollection<TournamentGroup> TournamentGroup { get; set; }
         public ICollection<TournamentTeam> TournamentTeam { get; set; }
+    }
+
+    public class TournamentData
+    {
+        public int Id { get; set; }
+        public string TournamentName { get; set; }
+        public string TournamentDescription { get; set; }
+        public string SceduledDate { get; set; }
+        public string ContactPerson { get; set; }
+        public string CreatedDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? CreatedBy { get; set; }
+        public bool? IsActive { get; set; }
+        public int? EntryFee { get; set; }
     }
 }

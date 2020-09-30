@@ -18,5 +18,10 @@ namespace BusinessLogicLayer.Services
         {
             return _authenticateDao.Authenticate(userName, password);
         }
+
+        public bool IsNotVerified(string userName, string password)
+        {
+            return _authenticateDao.IsNotVerified(userName, password);
+        }
     }
 }
