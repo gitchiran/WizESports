@@ -191,7 +191,7 @@
                                         <button type="button" id="btnExportRegisteredTeams" style="font-size:15px!important;" onclick="DownloadRegisteredTeams()" class="btn btnAdd">Export Data</button>
                                     </div>
 
-                                    <table id="tblTTD" class="col-lg-12 jsgrid-table m-t-20">
+                                    <table id="tblTTD" class="col-lg-12 jsgrid-table m-t-20 table table-responsive">
                                         <thead>
                                             <tr class="TableHeaderOuter jsgrid-header-row">
                                                 <th class="jsgrid-header-cell" style="display:none">ID</th>
@@ -220,7 +220,7 @@
                         <div class="col-lg-12 nopadding">
                             <div class="blog-list-post blog-details-wrap">
                                 <div class="blog-list-post-content">
-                                    <table id="TournamentGroupTableMain"></table>
+                                    <table id="TournamentGroupTableMain" class="table table-responsive"></table>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +259,7 @@
                                             @*<input type="text" id="datetimepicker1" />*@
                                         </div>
 
-                                        <div class="col-md-12 col-lg-12 text-center">
+                                        <div class="col-md-12 col-lg-12 text-right mt-3">
                                             <button type="button" id="btnAssignDraw" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('AssignDraw','')">Assign</button>
                                             <button type="button" id="btnCancelAssignDraw" style="font-size:15px!important;" class="btn btnCancel" onclick="ClearControls('TournamentDraw')">Cancel</button>
                                         </div>
@@ -289,7 +289,7 @@
                         <div class="col-lg-12 nopadding">
                             <div class="blog-list-post blog-details-wrap">
                                 <div class="blog-list-post-content">
-                                    <div class="row col-lg-12 col-md-12">
+                                    <div class="row">
                                         <div class="col-md-3 col-lg-3">
                                             <label for="form1" class="frmlabelHeading nopaddingleft">Group</label>
                                             <div id="divGroup_Match">
@@ -325,14 +325,9 @@
                                             <input type="text" class="form-control" id="txtPoints_Match" />
                                         </div>
 
-                                        <div class="row col-lg-12 col-md-12">
-                                            <div class="col-lg-6 col-md-6 text-right nopadding">
-                                                <button type="button" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('Tournament_Match','')">Assign</button>
-
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 float-left">
-                                                <button type="button" style="font-size:15px!important;" class="btn btnCancel" onclick="ClearControls('Tournament_Match')">Cancel</button>
-                                            </div>
+                                        <div class="col-lg-12 col-md-12 text-right mt-3">
+                                            <button type="button" style="font-size:15px!important;" class="btn btnAdd" onclick="AddDatatoDB('Tournament_Match','')">Assign</button>
+                                            <button type="button" style="font-size:15px!important;" class="btn btnCancel" onclick="ClearControls('Tournament_Match')">Cancel</button>
                                         </div>
                                     </div>
                                     <table id="tblTMD" class="col-lg-12 jsgrid-table m-t-30">
@@ -370,27 +365,26 @@
 
                             @if (ViewBag.UserRole == 1)
                             {
-                                <div class="sidebar-about-content">
-                                    <div class="row col-lg-12 col-md-12 nopadding">
-                                        <div class="col-lg-6 col-md-6"><p><a class="btn edit-new-button">Edit</a></p></div>
-                                        <div class="col-lg-6 col-md-6 nopadding"><p><a class="btn" onclick="UpdateStatus('TournamentDelete','DeleteTournament','');">Delete</a></p></div>
+                                <div class="">
+                                    <div class="row nopadding">
+                                        <div class="col-lg-6 col-md-6 mb-1"><button type="button" class="btn edit-new-button w-100">Edit</button></div>
+                                        <div class="col-lg-6 col-md-6"><button type="button" class="btn w-100" onclick="UpdateStatus('TournamentDelete','DeleteTournament','');">Delete</button></div>
                                     </div>
                                 </div>
 
                                 <div id="divEndDate" class="sidebar-about-content m-t-10">
                                     <div class="row col-lg-12 col-md-12 nopadding">
-                                        <div class="col-lg-6 col-md-6"><p>End Date</p></div>
-                                        <div class="col-lg-6 col-md-6 nopadding"><input type="datetime-local" id="txtTournamentEndDate" name="txtTournamentEndDate" class="form-control" placeholder="End Date"></div>
+                                        <div class="col-lg-12 col-md-12 nopadding">End Date</div>
+                                        <div class="col-lg-12 col-md-12 nopadding"><input type="datetime-local" id="txtTournamentEndDate" name="txtTournamentEndDate" class="form-control" placeholder="End Date"></div>
                                     </div>
                                 </div>
 
-                                <div id="btnEndDate" class="sidebar-about-content m-t-10">
-                                    <div class="row col-lg-12 col-md-12 nopadding">
-                                        <div class="col-lg-6 col-md-6"><p><a class="btn" onclick="UpdateTournamentEndDate()">End</a></p></div>
+                                <div id="btnEndDate" class="m-t-10">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 d-flex justify-content-end"><a class="btn" onclick="UpdateTournamentEndDate()">End</a></div>
                                         <div class="col-lg-6 col-md-6 nopadding"></div>
                                     </div>
                                 </div>
-
                                 <div id="divEndDateText" class="sidebar-about-content m-t-10">
                                     <div class="row col-lg-12 col-md-12 nopadding">
                                         <div class="col-lg-6 col-md-6"><span class="LabelHeader">End Date: </span></div>

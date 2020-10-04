@@ -185,7 +185,7 @@
         invalidClass: "jsgrid-invalid",
 
         containerClass: "jsgrid",
-        tableClass: "jsgrid-table",
+        tableClass: "jsgrid-table xxx",
         gridHeaderClass: "jsgrid-grid-header",
         gridBodyClass: "jsgrid-grid-body",
 

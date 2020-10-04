@@ -560,7 +560,7 @@ function ConvertJsontoDataTable(data, SubMenuSection) {
         }
 
         if (SubMenuSection == 'LastMatchDetails_Index') {
-            var Data = "<table id='tblTRD' class='col-lg-12 jsgrid-table m-t-10'><thead><tr class='TableHeaderOuter jsgrid-header-row' style='text-transform: uppercase;font-family: 'Oxanium', cursive;'><th class='jsgrid-header-cell' style='display:none'>Team ID</th><th class='jsgrid-header-cell IndexPageTableHeader' style='width:100px;color:#FFFFFF;'>Rank</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#FFFFFF;width: 60%;'>Team Name</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;'>Wins</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;'>Kills</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;'>Score</th></tr></thead><tbody id='tblTMD_tbody' class='col-lg-12' style='background: #18142d;'>";
+            var Data = "<table id='tblTRD' class='col-lg-12 jsgrid-table m-t-10'><thead><tr class='TableHeaderOuter jsgrid-header-row' style='text-transform: uppercase;font-family: 'Oxanium', cursive;'><th class='jsgrid-header-cell' style='display:none'>Team ID</th><th class='jsgrid-header-cell IndexPageTableHeader' style='width:100px;color:#FFFFFF;'>Rank</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#FFFFFF;width: 60%;'>Team Name</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;width: 40%;'>Wins</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;width: 40%;'>Kills</th><th class='jsgrid-header-cell IndexPageTableHeader' style='color:#E4A101;width: 40%;'>Score</th></tr></thead><tbody id='tblTMD_tbody' class='col-lg-12' style='background: #18142d;'>";
             for (var i = 0; i < data.length; i++) {
                 if (i == 0) {
                     $('#spnRankings').text(data[i].tournamentName);
@@ -1120,7 +1120,7 @@ function ValidateData(args, Section) {
 
     if (Section == 'TournamentGroups') {
         var RecordCount = $('.jsgrid-table>tbody tr').length;
-        var rows = $('.jsgrid-table>tbody tr');
+        var rows = $('.jsgrid-table.table.table-responsive>tbody tr');
         var GroupNameRepeatCount = 0;
 
         var GroupName = args.item.groupName;

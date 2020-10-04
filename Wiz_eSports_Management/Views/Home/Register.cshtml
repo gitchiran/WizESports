@@ -133,14 +133,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <input type="checkbox" id="chkTandC" name="chkTandC" value="" class="widthauto">
-                                <input type="text" placeholder="" name="TandC" id="TandC" class="dis-none">
-                                <label for="chkTandC"> I accept the <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('TermsOfUse')">Terms &amp; Conditions</a> and I acknowledge <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('PrivacyPolicy')">Privacy Policy</a></label>
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" id="chkTandC" name="chkTandC" value="" class="widthauto m-0 mt-1 mr-3">
+                                    <input type="text" placeholder="" name="TandC" id="TandC" class="dis-none">
+                                    <label for="chkTandC" class="m-0"> I accept the <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('TermsOfUse')">Terms &amp; Conditions</a> and I acknowledge <a style="color:Highlight;text-decoration:underline;" onclick="ViewData('PrivacyPolicy')">Privacy Policy</a></label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <input type="checkbox" id="EandC" name="EandC" value="" class="widthauto">
-                                <label for="EandC"> I agree to receive emails &amp; phone communications</label>
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" id="EandC" name="EandC" value="" class="widthauto m-0 mt-1 mr-3">
+                                    <label for="EandC" class="m-0"> I agree to receive emails &amp; phone communications</label>
+                                </div>
                             </div>
                         </div>
 
@@ -153,9 +157,9 @@
                             </div>
                         </div>
 
-                        <div class="row pull-right">
-                            <label class="m-t-15">Already a member? </label>
-                            <button class="btnSignIn m-l-5" onclick="PageRedirectClick('SignInPage')">Sign In</button>
+                        <div class="d-flex align-items-center mt-3 pull-right">
+                            <label class="m-0 mr-2">Already a member? </label>
+                            <button class="btnSignIn m-0 sign-in-btn" onclick="PageRedirectClick('SignInPage')">Sign In</button>
                         </div>
                     </form>
                 </div>

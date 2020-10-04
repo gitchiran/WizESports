@@ -255,7 +255,8 @@ label {
     letter-spacing: 0;
     line-height: 1;
     margin-bottom: 0;
-    padding: 20px 44px;
+   /* padding: 20px 44px;*/
+    padding: 20px 30px;
     text-align: center;
     text-transform: uppercase;
     touch-action: manipulation;
@@ -585,6 +586,7 @@ label {
         flex-direction: row;
         flex-wrap: wrap;
         margin-left: auto;
+        margin-bottom: 0;
     }
 
         .navbar-wrap ul li {
@@ -625,7 +627,7 @@ label {
             .navbar-wrap ul li.active a::after,
             .navbar-wrap ul li:hover > a::after {
                 content: "";
-                position: absolute;
+                /*   position: absolute;*/
                 height: 3px;
                 background: #e4a101;
                 right: 40px;
@@ -4916,3 +4918,16 @@ ul > li.opt {
         visibility: visible;
     }
 }
+
+.our-values-list {
+    color: #6c6c6c;
+}
+.form-control {
+    padding: .4rem .75rem;
+}
+.sign-in-btn {
+    padding: 10px !important;
+}
+
+
+  
